@@ -1,55 +1,57 @@
 package com.zing.vchat.message;
 
-import com.zing.vchat.JsonElement.Message;
-import com.zing.vchat.JsonElement.Messages;
-import com.zing.vchat.cache.EventSourceCache;
+import com.zing.vchat.JsonElement.MessageJson;
+import com.zing.vchat.JsonElement.MessagesJson;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.OutboundEvent;
 
 import java.io.IOException;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessageBox {
-    private String userId;
-    private Queue<Message> messages;
+    // private Integer unreadCount=0;
+    // private String userId;
+    private EventOutput eventOutput;
+    private LinkedBlockingQueue<MessageJson> messagesCache = new LinkedBlockingQueue<MessageJson>(200);
     private static OutboundEvent outboundEvent = new OutboundEvent.Builder().name("newMessage").data(1).build();
-
-    public MessageBox() {
-        this.messages = new ConcurrentLinkedDeque<>();
-    }
-
 
     /**
      * 采用 当收到消息后通过 <strong>EventSource</strong> 直接转发用户
+     *
      * @param message 将要处理的消息
      */
-    public void ProcessMessage(Message message) {
+    public void ProcessMessage(MessageJson message) {
         new Thread(() -> {
-            //messages.add(message);
-            EventOutput eventOutput = EventSourceCache.getInstance().getEventOutput(userId);
-            if (null != eventOutput) {
+            if (null != this.eventOutput) {
                 try {
-                    //eventOutput.write(outboundEvent);
-                    eventOutput.write(new OutboundEvent.Builder().name("messages").data(Message.class, message).build());
+                    this.eventOutput.write(new OutboundEvent.Builder().name("messagesCache").data(MessageJson.class, message).build());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }else{
-                messages.add(message);
+            } else {
+                if (messagesCache.remainingCapacity() == 0) {
+                    messagesCache.remove();
+                }
+                messagesCache.add(message);
             }
         }).start();
     }
 
     /**
      * 采用 当收到消息后通过 <strong>EventSource</strong>提醒用户有新的消息
+     *
      * @param message 将要处理的消息
      */
-    public void ProcessMessage2(Message message) {
+    public void ProcessMessage2(MessageJson message) {
         new Thread(() -> {
-            messages.add(message);
-            EventOutput eventOutput = EventSourceCache.getInstance().getEventOutput(userId);
-            if (null != eventOutput) {
+            if (messagesCache.remainingCapacity() == 0) {
+                messagesCache.remove();
+            }
+            messagesCache.add(message);
+            if (null != this.eventOutput) {
                 try {
                     eventOutput.write(outboundEvent);
                 } catch (IOException e) {
@@ -59,14 +61,27 @@ public class MessageBox {
         }).start();
     }
 
-
-    public Messages getMessages(){
-        Messages messages = new Messages();
-        for (int i = 0; i < 10; i++) {
-            if (this.messages.isEmpty())
+    public MessagesJson getMessagesCache() {
+        MessagesJson messagesJson = new MessagesJson();
+        for (int i = 0; i < 50; i++) {
+            if (this.messagesCache.isEmpty())
                 break;
-            messages.putMessage(this.messages.remove());
+            messagesJson.putMessage(this.messagesCache.remove());
         }
-        return messages;
+        return messagesJson;
+    }
+
+    public EventOutput getEventOutput() {
+        return eventOutput;
+    }
+
+    public EventOutput setEventOutput() {
+        EventOutput eventOutput = new EventOutput();
+        this.eventOutput = eventOutput;
+        return eventOutput;
+    }
+
+    public void deleteEventOutput() {
+        this.eventOutput = null;
     }
 }

@@ -1,4 +1,4 @@
-package com.zing.vchat;
+package com.zing.vchat.base;
 
 
 import java.text.SimpleDateFormat;
@@ -44,6 +44,13 @@ public class Token {
     }
 
     public boolean isValid(){
+        if (null == token) return false;
+        return this.expiration.after(new Date());
+    }
+
+    public boolean isValid(String token_str){
+        if (null == this.token || null == token_str) return false;
+        if (!this.token.toString().equals(token_str)) return false;
         return this.expiration.after(new Date());
     }
 

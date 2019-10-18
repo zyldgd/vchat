@@ -1,34 +1,32 @@
 package com.zing.vchat.message;
 
-import com.zing.vchat.Message;
+import com.zing.vchat.JsonElement.MessageJson;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class MessageCollector extends Thread{
-    private Queue<Message> MessageQueue;
+public class MessageCollector extends Thread {
 
-    public MessageCollector(){
-        this.MessageQueue = new ConcurrentLinkedDeque<>();
+    private static LinkedBlockingQueue<MessageJson> MessageQueue = new LinkedBlockingQueue<>(10000);
+
+    public static void putToMessageQueue(MessageJson messageJson) {
+        MessageQueue.add(messageJson);
     }
 
-    public void putToMessageQueue(Message message){
-        this.MessageQueue.add(message);
-    }
-
-    private Message getFromMessage(){
-        if (this.MessageQueue.isEmpty()) return null;
-        return this.MessageQueue.remove();
-    }
-
-    private void ProcessMessages(){
-        if (!this.MessageQueue.isEmpty()){
-            //TODO 发送给数据库，并发给消息分发器
+    private void ProcessMessages() {
+        try {
+            MessageJson messageJson = MessageQueue.take();
+            MessageDistributor.putToMessageQueue(messageJson);
+            // TODO 发送给消息分发器
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
+    @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
-        ProcessMessages();
+        while (true) {
+            ProcessMessages();
+        }
     }
 }

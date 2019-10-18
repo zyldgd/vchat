@@ -1,5 +1,4 @@
-package com.zing.vchat.message;
-
+package com.zing.vchat.base;
 
 public class User {
     private String id;
