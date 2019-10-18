@@ -1,13 +1,16 @@
 package com.zing.vchat.util;
 
+import com.zing.vchat.base.HttpHeaderKey;
 import com.zing.vchat.cache.UsersCache;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class AuthorizationUtils {
+
+
     public static boolean isPass(HttpServletRequest request){
-        String token_str = request.getHeader("userToken");
-        String userId = request.getHeader("userId");
+        String userId = request.getHeader(HttpHeaderKey.USER_ID.toString());
+        String token_str = request.getHeader(HttpHeaderKey.USER_TOKEN.toString());
         return UsersCache.getToken(userId).isValid(token_str);
     }
 
@@ -16,10 +19,10 @@ public class AuthorizationUtils {
     }
 
     public static String getUserId(HttpServletRequest request){
-        return request.getHeader("userId");
+        return request.getHeader(HttpHeaderKey.USER_ID.toString());
     }
 
     public static String getTokenStr(HttpServletRequest request){
-        return request.getHeader("userToken");
+        return request.getHeader(HttpHeaderKey.USER_TOKEN.toString());
     }
 }

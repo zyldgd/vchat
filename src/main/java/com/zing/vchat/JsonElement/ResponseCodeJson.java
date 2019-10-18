@@ -14,7 +14,7 @@ public class ResponseCodeJson {
     @XmlElement(name = "meaning")
     private String meaning;
 
-    ResponseCodeJson(ResponseCode responseCode){
+    public ResponseCodeJson(ResponseCode responseCode){
         this.code = responseCode.getCode();
         this.meaning = responseCode.getMeaning();
     }

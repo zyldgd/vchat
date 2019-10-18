@@ -1,5 +1,6 @@
 package com.zing.vchat;
 
+import com.zing.vchat.JsonElement.TokenJson;
 import com.zing.vchat.filter.CrossDomainFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -8,12 +9,14 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class RestApplication extends ResourceConfig {
     public RestApplication() {
         // 资源类所在的包路径
-        packages("com.zing.ichat.resources");
-
+        packages("com.zing.vchat.resources");
+        System.out.println("com.zing.vchat.resources UP!!");
         // 注册 MultiPart
         register(MultiPartFeature.class);
 
         // 注册CORS过滤器
         register(CrossDomainFilter.class);
+
+
     }
 }

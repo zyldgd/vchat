@@ -12,6 +12,7 @@ class UserCacheInfo {
     private MessageBox massageBox;
 
     UserCacheInfo(String userId) {
+        System.out.println("UserCacheInfo install");
         this.userId = userId;
         this.massageBox = new MessageBox();
     }
