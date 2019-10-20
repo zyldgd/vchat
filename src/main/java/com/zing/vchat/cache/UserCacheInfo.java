@@ -7,14 +7,14 @@ import org.glassfish.jersey.media.sse.EventOutput;
 import java.io.IOException;
 
 class UserCacheInfo {
-    private String userId;
+    private UserJson userJson;
     private Token token;
     private MessageBox massageBox;
 
-    UserCacheInfo(String userId) {
-        System.out.println("UserCacheInfo install");
-        this.userId = userId;
+    UserCacheInfo(UserJson userJson) {
+        this.userJson = userJson;
         this.massageBox = new MessageBox();
+        System.out.println("UserCacheInfo install");
     }
 
     void deleteEventOutput() {

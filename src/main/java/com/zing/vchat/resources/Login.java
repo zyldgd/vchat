@@ -47,8 +47,8 @@ public class Login {
 
         //TODO 检查用户合法性，并返回 token
         if (userId.equals("admin") && password.equals("admin")){
-            UsersCache.crateUserCacheInfo(userId);
-            TokenJson tokenJson = new TokenJson(userId,UsersCache.setToken(userId));
+            Token token = UsersCache.setToken(userId);
+            TokenJson tokenJson = new TokenJson(userId, token);
             return Response.ok(tokenJson).build();
         }else{
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();

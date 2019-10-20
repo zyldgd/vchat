@@ -8,10 +8,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UsersCache {
-    private static Map<String, UserCacheInfo> usersCacheInfo = new ConcurrentHashMap<>();
+    private static Map<String, UserCacheInfo> usersCacheInfo = new ConcurrentHashMap<>(1000);
 
-    public static void crateUserCacheInfo(String userId){
-        usersCacheInfo.put(userId, new UserCacheInfo(userId));
+    public static void crateUserCacheInfo(UserJson userJson){
+        if (usersCacheInfo.remainingCapacity() == 0) {
+            usersCacheInfo.remove();
+        }
+        usersCacheInfo.put(userId, new UserCacheInfo(userJson));
     }
 
     public static void deleteToken(String userId) {

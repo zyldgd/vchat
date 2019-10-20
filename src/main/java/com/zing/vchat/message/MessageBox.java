@@ -15,8 +15,23 @@ public class MessageBox {
     // private Integer unreadCount=0;
     // private String userId;
     private EventOutput eventOutput;
-    private LinkedBlockingQueue<MessageJson> messagesCache = new LinkedBlockingQueue<MessageJson>(200);
+    private LinkedBlockingQueue<MessageJson> messagesCache = new LinkedBlockingQueue<MessageJson>(50);
     private static OutboundEvent outboundEvent = new OutboundEvent.Builder().name("newMessage").data(1).build();
+    private LinkedBlockingQueue<MessageJson> MessageQueue = new LinkedBlockingQueue<>(50);
+
+    @SuppressWarnings("InfiniteLoopStatement")
+    private void ProcessMessages(){
+        new Thread(() -> {
+            while (true) {
+                try {
+                    MessageJson messageJson = MessageQueue.take();
+                
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
     /**
      * 采用 当收到消息后通过 <strong>EventSource</strong> 直接转发用户
@@ -83,5 +98,9 @@ public class MessageBox {
 
     public void deleteEventOutput() {
         this.eventOutput = null;
+    }
+
+    public static void putToMessageQueue(MessageJson message){
+        MessageQueue.add(message);
     }
 }

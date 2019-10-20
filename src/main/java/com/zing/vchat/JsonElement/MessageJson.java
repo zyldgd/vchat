@@ -13,25 +13,25 @@ public class MessageJson {
      * 该消息的ID
      */
     @XmlElement(name = "id")
-    private java.lang.String id;
+    private String id;
 
     /**
      * 消息内容
      */
     @XmlElement(name = "content")
-    private java.lang.String content;
+    private String content;
 
     /**
      * 日期
      */
     @XmlElement(name = "date")
-    private java.lang.String date;
+    private String date;
 
     /**
      * 时间
      */
     @XmlElement(name = "time")
-    private java.lang.String time;
+    private String time;
 
     /**
      * 发送者ID
@@ -43,29 +43,29 @@ public class MessageJson {
      * 消息所在的会话ID
      */
     @XmlElement(name = "conversationId")
-    private java.lang.String conversationId;
+    private String conversationId;
 
-    public java.lang.String getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(java.lang.String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public java.lang.String getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(java.lang.String date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public java.lang.String getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(java.lang.String time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -77,16 +77,16 @@ public class MessageJson {
         this.senderId = senderId;
     }
 
-    public java.lang.String getConversationId() {
+    public String getConversationId() {
         return conversationId;
     }
 
-    public void setConversationId(java.lang.String conversationId) {
+    public void setConversationId(String conversationId) {
         this.conversationId = conversationId;
     }
 
     @Override
-    public java.lang.String toString() {
-        return java.lang.String.format("ID:%s  DATE:%s     FORM:%s    TO:%s     CONTENT:%s",id, date,senderId, conversationId,content);
+    public String toString() {
+        return String.format("ID:%s  DATE:%s     FORM:%s    TO:%s     CONTENT:%s",id, date,senderId, conversationId,content);
     }
 }

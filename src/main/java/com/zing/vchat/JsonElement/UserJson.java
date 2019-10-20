@@ -7,24 +7,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "UserJson")
 public class UserJson {
 
-    @XmlElement(name = "username")
-    private String username;
+    @XmlElement(name = "userId")
+    private String userId;
 
     @XmlElement(name = "password")
     private String password;
 
 
-    public UserJson(String username, String password) {
-        this.username = username;
+    public UserJson(String userId, String password) {
+        this.userId = userId;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -37,6 +37,6 @@ public class UserJson {
 
     @Override
     public String toString() {
-        return "username:" + username + " password:" + password;
+        return "userId:" + userId + " password:" + password;
     }
 }
