@@ -1,6 +1,21 @@
 package com.zing.vchat.resources;
 
 
+import com.zing.vchat.JsonElement.ConversationJson;
+import com.zing.vchat.JsonElement.MessageJson;
+import com.zing.vchat.JsonElement.ResponseCodeJson;
+import com.zing.vchat.base.HttpHeaderKey;
+import com.zing.vchat.base.ResponseCode;
+import com.zing.vchat.cache.ConversationCache;
+import com.zing.vchat.util.AuthorizationUtils;
+
+import javax.inject.Singleton;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 @Singleton
 @Path("conversation")
 public class Conversation {
@@ -12,9 +27,18 @@ public class Conversation {
      * @return 状态码
      */
     @GET
+    @Path("/{conversationId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getConversations(@Context HttpServletRequest request) {
-       
+    public Response getConversations(@Context HttpServletRequest request, @PathParam("conversationId") String conversationId) {
+        if(!AuthorizationUtils.isPass(request)){
+            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+        }
+        ConversationJson conversationJson = ConversationCache.getConversation(conversationId);
+        if (null == conversationJson){
+            return Response.ok(new ResponseCodeJson(ResponseCode.INEXISTENCE)).build();
+        }
+
+        return Response.ok(conversationJson).build();
     }
 
 
@@ -28,7 +52,7 @@ public class Conversation {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response newConversation(@Context HttpServletRequest request, MessageJson message) {
-       
+        return Response.ok().build();
     }
 
     /**
@@ -41,7 +65,7 @@ public class Conversation {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response deleteConversation(@Context HttpServletRequest request, MessageJson message) {
-       
+        return Response.ok().build();
     }
 
     /**
@@ -50,10 +74,10 @@ public class Conversation {
      * @param message 消息
      * @return 状态码
      */
-    @GET
+    @PUT
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response modifyConversation(@Context HttpServletRequest request, MessageJson message) {
-       
+        return Response.ok().build();
     }
 }

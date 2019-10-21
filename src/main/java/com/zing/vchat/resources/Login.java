@@ -23,34 +23,37 @@ public class Login {
     @GET
     @Path("/test")
     @Produces({MediaType.APPLICATION_JSON})
-    //@Consumes({MediaType.APPLICATION_JSON})
     public Response login(@Context HttpServletRequest request) {
-        if (!AuthorizationUtils.isPass(request)){
+        if (!AuthorizationUtils.isPass(request)) {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
         return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
     }
 
 
-    @POST
+    @DELETE
+    @Path("/token")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response logout(@Context HttpServletRequest request) {
+    public Response deleteToken(@Context HttpServletRequest request) {
+        if (!AuthorizationUtils.isPass(request)) {
+            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+        }
+        String userId = request.getHeader(HttpHeaderKey.USER_ID.toString());
+        UsersCache.deleteToken(userId);
         return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
     }
+
 
     @GET
     @Path("/token")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getToken(@Context HttpServletRequest request) {
         String userId = request.getHeader(HttpHeaderKey.USER_ID.toString());
-        String password = request.getHeader(HttpHeaderKey.USER_PASSWORD.toString());
-
-        //TODO 检查用户合法性，并返回 token
-        if (userId.equals("admin") && password.equals("admin")){
+        if (AuthorizationUtils.verify(request)) {
             Token token = UsersCache.setToken(userId);
             TokenJson tokenJson = new TokenJson(userId, token);
             return Response.ok(tokenJson).build();
-        }else{
+        } else {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
     }

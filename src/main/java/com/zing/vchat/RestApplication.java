@@ -17,6 +17,13 @@ public class RestApplication extends ResourceConfig {
         // 注册CORS过滤器
         register(CrossDomainFilter.class);
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 }

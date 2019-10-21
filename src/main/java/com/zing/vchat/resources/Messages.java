@@ -47,7 +47,7 @@ public class Messages {
         if(!AuthorizationUtils.isPass(request)){
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
-        MessageCollector.putToMessageQueue(message);
+        MessageCollector.getInstance().putToMessageQueue(message);
         return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
     }
 

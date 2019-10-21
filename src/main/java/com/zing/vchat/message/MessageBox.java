@@ -12,21 +12,26 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessageBox {
-    // private Integer unreadCount=0;
-    // private String userId;
     private EventOutput eventOutput;
     private LinkedBlockingQueue<MessageJson> messagesCache = new LinkedBlockingQueue<MessageJson>(50);
+    private LinkedBlockingQueue<MessageJson> messageQueue = new LinkedBlockingQueue<>(50);
     private static OutboundEvent outboundEvent = new OutboundEvent.Builder().name("newMessage").data(1).build();
-    private LinkedBlockingQueue<MessageJson> MessageQueue = new LinkedBlockingQueue<>(50);
+
+    public MessageBox() {
+        ProcessMessages();
+    }
 
     @SuppressWarnings("InfiniteLoopStatement")
-    private void ProcessMessages(){
+    private void ProcessMessages() {
+        System.out.println("MessageBox ProcessMessages!");
         new Thread(() -> {
             while (true) {
                 try {
-                    MessageJson messageJson = MessageQueue.take();
-                
-                } catch (InterruptedException e) {
+                    MessageJson messageJson = messageQueue.take();
+                    if (!this.eventOutput.isClosed()) {
+                        this.eventOutput.write(new OutboundEvent.Builder().name("newMessage").data(MessageJson.class, messageJson).build());
+                    }
+                } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -100,7 +105,10 @@ public class MessageBox {
         this.eventOutput = null;
     }
 
-    public static void putToMessageQueue(MessageJson message){
-        MessageQueue.add(message);
+    public void putToMessageQueue(MessageJson message) {
+        if (messageQueue.remainingCapacity() == 0) {
+            messageQueue.remove();
+        }
+        messageQueue.add(message);
     }
 }

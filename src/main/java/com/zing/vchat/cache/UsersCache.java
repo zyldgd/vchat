@@ -1,5 +1,6 @@
 package com.zing.vchat.cache;
 
+import com.zing.vchat.JsonElement.UserJson;
 import com.zing.vchat.base.Token;
 import com.zing.vchat.message.MessageBox;
 import org.glassfish.jersey.media.sse.EventOutput;
@@ -11,10 +12,7 @@ public class UsersCache {
     private static Map<String, UserCacheInfo> usersCacheInfo = new ConcurrentHashMap<>(1000);
 
     public static void crateUserCacheInfo(UserJson userJson){
-        if (usersCacheInfo.remainingCapacity() == 0) {
-            usersCacheInfo.remove();
-        }
-        usersCacheInfo.put(userId, new UserCacheInfo(userJson));
+        usersCacheInfo.put(userJson.getUserId(), new UserCacheInfo(userJson));
     }
 
     public static void deleteToken(String userId) {
@@ -45,5 +43,9 @@ public class UsersCache {
 
     public static void deleteEventOutput(String userId){
         usersCacheInfo.get(userId).deleteEventOutput();
+    }
+
+    public static UserCacheInfo getUserCacheInfo(String userId){
+        return usersCacheInfo.get(userId);
     }
 }
