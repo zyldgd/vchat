@@ -24,13 +24,13 @@
             height: 100%;
             z-index: -1;
         }
-        
+
         .limiter {
             position: absolute;
             top: 0;
             left: 0;
         }
-        
+
         .container-login100-bg {
             position: absolute;
             z-index: 1;
@@ -41,7 +41,7 @@
             background-image: url('images/bg3.jpg');
             opacity: 0.4;
         }
-        
+
         .login100-form-btn {
             background: #4e4e4e;
         }
@@ -50,53 +50,51 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="1920" height="979"></canvas>
-    <div class="limiter">
-        <div class="container-login100-bg"></div>
-        <div class="container-login100">
-            <div class="wrap-login100 p-t-190 p-b-30" style="padding-top: 50px;">
-                <form class="login100-form validate-form">
-                    <div class="login100-form-avatar" style="width: 300px; height: 300px;">
-                        <img src="images/logo_moyu.png" alt="AVATAR">
-                    </div>
-                    <!-- <span class="login100-form-title p-t-20 p-b-45">Hello</span> -->
-                    <div class="wrap-input100 validate-input m-b-10" data-validate="请输入用户名">
-                        <input class="input100" type="text" name="username" placeholder="用户名" autocomplete="off">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
+<canvas id="canvas" width="1920" height="979"></canvas>
+<div class="limiter">
+    <div class="container-login100-bg"></div>
+    <div class="container-login100">
+        <div class="wrap-login100 p-t-190 p-b-30" style="padding-top: 50px;">
+            <form class="login100-form validate-form">
+                <div class="login100-form-avatar" style="width: 300px; height: 300px;">
+                    <img src="images/logo_moyu.png" alt="AVATAR">
+                </div>
+                <!-- <span class="login100-form-title p-t-20 p-b-45">Hello</span> -->
+                <div class="wrap-input100 validate-input m-b-10" data-validate="请输入用户名">
+                    <input id="input_username" class="input100" type="text" placeholder="用户名">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
                             <i class="fa fa-user"></i>
                         </span>
-                    </div>
+                </div>
 
-                    <div class="wrap-input100 validate-input m-b-10" data-validate="请输入密码">
-                        <input class="input100" type="password" name="pass" placeholder="密码">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
+                <div class="wrap-input100 validate-input m-b-10" data-validate="请输入密码">
+                    <input id="input_password" class="input100" type="password" placeholder="密码" onpaste="return false"
+                           oncontextmenu="return false" oncopy="return false" oncut="return false">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
                             <i class="fa fa-lock"></i>
                         </span>
-                    </div>
+                </div>
 
-                    <div class="container-login100-form-btn p-t-10">
-                        <button class="login100-form-btn">登 录</button>
-                    </div>
+                <div class="container-login100-form-btn p-t-10">
+                    <div id="btn_login" onclick="login()" class="login100-form-btn">登 录</div>
+                </div>
 
-                    <div class="text-center w-full p-t-25 p-b-230">
-                        <a href="#" class="txt1">忘记密码？</a>
-                    </div>
+                <div class="text-center w-full p-t-25 p-b-230">
+                    <a href="#" onclick="getCookie('zing')" class="txt1">忘记密码？</a>
+                </div>
 
-                    <div class="text-center w-full">
-                        <a class="txt1" href="#">
-                            立即注册
-                            <i class="fa fa-long-arrow-right"></i>
-                        </a>
-                    </div>
-                </form>
-            </div>
+                <div class="text-center w-full">
+                    <a class="txt1" href="#" onclick="Setcookie('zing', '123')">
+                        立即注册
+                        <i class="fa fa-long-arrow-right"></i>
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
-
-    <!-- <script src="vendor/jquery/jquery-1.12.4.min.js"></script>
-    <script src="js/main.js"></script> -->
+</div>
 
 </body>
 <script>
@@ -154,7 +152,7 @@
         //星星移动范围，值越大范围越小，
     }
 
-    var Star = function() {
+    var Star = function () {
 
         this.orbitRadius = random(maxOrbit(w, h));
         this.radius = random(60, this.orbitRadius) / 8;
@@ -170,7 +168,7 @@
         stars[count] = this;
     }
 
-    Star.prototype.draw = function() {
+    Star.prototype.draw = function () {
         var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
             y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
             twinkle = random(10);
@@ -199,12 +197,137 @@
         ctx.globalCompositeOperation = 'lighter';
         for (var i = 1, l = stars.length; i < l; i++) {
             stars[i].draw();
-        };
+        }
+        ;
 
         window.requestAnimationFrame(animation);
     }
 
     animation();
 </script>
+<script>
+    function Setcookie(key, value) {
+        let expdate = new Date();   //初始化时间
+        expdate.setTime(expdate.getTime() + 30 * 60 * 1000);   //时间
+        document.cookie = key + "=" + value + ";expires=" + expdate.toString() + ";path=/";
 
+        //即document.cookie= name+"="+value+";path=/";   时间可以不要，但路径(path)必须要填写，因为JS的默认路径是当前页，如果不填，此cookie只在当前页面生效！~
+    }
+
+    function getCookie(key) {
+        if (document.cookie.length > 0) {
+            let c_start = document.cookie.indexOf(key + "=");
+            if (c_start !== -1) {
+                c_start = c_start + key.length + 1;
+                let c_end = document.cookie.indexOf(";", c_start);
+                if (c_end === -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start, c_end))
+            }
+        }
+        return null;
+    }
+
+    function checkCookie() {
+        username = getCookie('username')
+        if (username != null && username !== "") {
+            alert('Welcome again ' + username + '!')
+        } else {
+            username = prompt('Please enter your name:', "")
+            if (username != null && username !== "") {
+                setCookie('username', username, 365)
+            }
+        }
+    }
+</script>
+<script>
+
+    let input_userId = document.getElementById("input_username");
+    let input_password = document.getElementById("input_password");
+
+    var notPat1 = new RegExp(/[^0-9a-zA-Z@\\.]/g);
+
+    input_userId.onchange = function () {
+        this.value = this.value.replace(notPat1, '');
+    };
+
+    input_userId.onkeyup = function () {
+        this.value = this.value.replace(notPat1, '');
+    };
+
+    input_password.onchange = function () {
+        this.value = this.value.replace(notPat1, '');
+    };
+
+    input_password.onkeyup = function () {
+        this.value = this.value.replace(notPat1, '');
+    };
+
+
+    function login() {
+        let userId = input_userId.value;
+        let password = input_password.value;
+
+        if (userId === "" || password === "") {
+            alert("用户名密码不能为空！");
+            return;
+        }
+        if (notPat1.test(userId)) {
+            alert("用户名密码不能含有特殊字符！");
+            return;
+        }
+
+        let header = [{key: "user_id", value: userId}, {key: "user_password", value: password}];
+
+        ajax("GET", "webapi/login/token", header, null, function (xmlHttpRequest, ev) {
+            let type = xmlHttpRequest.getResponseHeader("Content-Type");
+            if (type === 'application/json') {
+                let result = JSON.parse(xmlHttpRequest.responseText);
+                console.log(result);
+
+                Setcookie(result.userId, result.token);
+
+                self.location.href="/"
+            } else {
+                console.log(xmlHttpRequest.responseText);
+            }
+        });
+
+
+    }
+
+    function ajax(method, url, header, date, callback) {
+        let xmlHttpRequest;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlHttpRequest = new XMLHttpRequest();
+        } else {// code for IE6, IE5
+            xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlHttpRequest.timeout = 5000;
+        xmlHttpRequest.ontimeout = function (ev) {
+            alert("请求超时！");
+        };
+        xmlHttpRequest.open(method, url, true);
+
+        header.forEach(function (item, index) {
+            xmlHttpRequest.setRequestHeader(item.key, item.value);
+        });
+
+        xmlHttpRequest.send(date);
+        console.log("send date:" + date);
+        xmlHttpRequest.onreadystatechange = function (ev) {
+            if (xmlHttpRequest.readyState === 4 && xmlHttpRequest.status === 200) {
+                callback(xmlHttpRequest, ev);
+                /*var type=request.getResponseHeader("Content-Type");
+               if(type.indexOf("xml") !== -1 && request.responseXML){
+                   callback(request.responseXML); //Document对象响应
+               }else if(type=== 'application/json'){
+                   callback(JSON.parse(request.responseText)) //JSON响应
+               }else {
+                   callback(request.responseText);
+               }*/
+            }
+        };
+    }
+
+</script>
 </html>
