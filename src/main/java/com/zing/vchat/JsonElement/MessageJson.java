@@ -11,8 +11,8 @@ public class MessageJson {
     /**
      * 消息ID
      */
-    @XmlElement(name = "messageId")
-    private String messageId;
+    @XmlElement(name = "messageHash")
+    private String messageHash;
 
     /**
      * 消息内容
@@ -49,12 +49,12 @@ public class MessageJson {
     @XmlElement(name = "messageType")
     private String messageType;
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
+    public void setMessageHash(String messageHash) {
+        this.messageHash = messageHash;
     }
 
-    public String getMessageId() {
-        return this.messageId;
+    public String getMessageHash() {
+        return this.messageHash;
     }
 
     public String getContent() {
@@ -91,7 +91,7 @@ public class MessageJson {
 
     @Override
     public String toString() {
-        return String.format("ID:%s    DATE:%s     FORM:%s    TO:%s     CONTENT:%s", messageId, date, senderId, receiverId, content);
+        return String.format("ID:%s    DATE:%s     FORM:%s    TO:%s     CONTENT:%s", messageHash, date, senderId, receiverId, content);
     }
 
     public String getMessageType() {

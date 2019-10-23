@@ -16,16 +16,18 @@ public class MessagesDao {
         if (messageType.equals("private")) {
             DBApi dbApi = new DBApi(DBApi.MOYU_MESSAGES_DB);
             Connection connection = dbApi.getConnection();
-            String sql = "INSERT INTO `" + messageJson.getReceiverId() + "`(content, senderId, messageType, receiverId, date, time) VALUES(?,?,?,?,?,?)";
+            String sql = "INSERT INTO `" + messageJson.getReceiverId() + "`(messageHash, content, senderId, messageType, receiverId, date, time) VALUES(?,?,?,?,?,?,?)";
             try {
                 connection.setAutoCommit(false);
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, messageJson.getContent());
-                preparedStatement.setString(2, messageJson.getSenderId());
-                preparedStatement.setString(3, messageJson.getMessageType());
-                preparedStatement.setString(4, messageJson.getReceiverId());
-                preparedStatement.setString(5, messageJson.getDate());
-                preparedStatement.setString(6, messageJson.getTime());
+
+                preparedStatement.setString(1, messageJson.getMessageHash());
+                preparedStatement.setString(2, messageJson.getContent());
+                preparedStatement.setString(3, messageJson.getSenderId());
+                preparedStatement.setString(4, messageJson.getMessageType());
+                preparedStatement.setString(5, messageJson.getReceiverId());
+                preparedStatement.setString(6, messageJson.getDate());
+                preparedStatement.setString(7, messageJson.getTime());
                 preparedStatement.execute();
                 connection.commit();
                 preparedStatement.close();
@@ -43,7 +45,9 @@ public class MessagesDao {
 
     public static void main(String[] args){
         MessageJson messageJson = new MessageJson();
+
         messageJson.setContent("love u");
+        messageJson.setMessageHash("c4662daf16d885313246d60fd5ace965");
         messageJson.setDate("2019-10-24");
         messageJson.setTime("01:10:55");
         messageJson.setSenderId("100000");
@@ -52,5 +56,4 @@ public class MessagesDao {
 
         MessagesDao.insert(messageJson);
     }
-
 }
