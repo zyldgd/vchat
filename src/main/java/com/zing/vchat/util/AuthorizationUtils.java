@@ -3,6 +3,7 @@ package com.zing.vchat.util;
 import com.zing.vchat.base.HttpHeaderKey;
 import com.zing.vchat.cache.UserCacheInfo;
 import com.zing.vchat.cache.UsersCache;
+import com.zing.vchat.dao.UsersDao;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,9 +29,9 @@ public class AuthorizationUtils {
     }
 
     public static boolean verify(HttpServletRequest request) {
-        String userId = request.getHeader(HttpHeaderKey.USER_ID.toString());
+        String username = request.getHeader(HttpHeaderKey.USER_NAME.toString());
         String password = request.getHeader(HttpHeaderKey.USER_PASSWORD.toString());
-        UserCacheInfo userCacheInfo = UsersCache.getUserCacheInfo(userId);
-        return (password.equals(userCacheInfo.getUserJson().getPassword()));
+        System.out.println(username + " / " + password);
+        return UsersDao.verifyBuName(username, password);
     }
 }

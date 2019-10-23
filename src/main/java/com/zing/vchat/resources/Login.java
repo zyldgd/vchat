@@ -2,11 +2,11 @@ package com.zing.vchat.resources;
 
 import com.zing.vchat.JsonElement.ResponseCodeJson;
 import com.zing.vchat.JsonElement.TokenJson;
-import com.zing.vchat.JsonElement.UserJson;
 import com.zing.vchat.base.HttpHeaderKey;
 import com.zing.vchat.base.ResponseCode;
 import com.zing.vchat.base.Token;
 import com.zing.vchat.cache.UsersCache;
+import com.zing.vchat.dao.UsersDao;
 import com.zing.vchat.util.AuthorizationUtils;
 
 import javax.inject.Singleton;
@@ -48,8 +48,9 @@ public class Login {
     @Path("/token")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getToken(@Context HttpServletRequest request) {
-        String userId = request.getHeader(HttpHeaderKey.USER_ID.toString());
+        String username = request.getHeader(HttpHeaderKey.USER_NAME.toString());
         if (AuthorizationUtils.verify(request)) {
+            String userId = UsersDao.queryByName(username).getUserId();
             Token token = UsersCache.setToken(userId);
             TokenJson tokenJson = new TokenJson(userId, token);
             return Response.ok(tokenJson).build();

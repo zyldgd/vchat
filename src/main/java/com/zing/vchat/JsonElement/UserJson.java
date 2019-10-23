@@ -16,6 +16,21 @@ public class UserJson {
     @XmlElement(name = "password")
     private String password;
 
+    @XmlElement(name = "nickname")
+    private String nickname;
+
+    @XmlElement(name = "email")
+    private String email;
+
+    @XmlElement(name = "avatarPath")
+    private String avatarPath;
+
+    @XmlElement(name = "remark")
+    private String remark;
+
+    @XmlElement(name = "grade")
+    private Integer grade;
+
     public UserJson(){
 
     }
@@ -44,7 +59,7 @@ public class UserJson {
 
     @Override
     public String toString() {
-        return "userId:" + userId + " password:" + password;
+        return "userId:" + userId +  "  username:" + username +"  password:" + password + "  nickname:" + nickname;
     }
 
     public String getUsername() {
@@ -53,5 +68,45 @@ public class UserJson {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
     }
 }

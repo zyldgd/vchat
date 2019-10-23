@@ -6,7 +6,8 @@ public enum  ResponseCode {
     SUCCEED(204,"succeed"),
     ERR(404,"error"),
     FAIL(405,"fail"),
-    INEXISTENCE(406,"inexistence");
+    INEXISTENCE(406,"inExisted"),
+    EXISTENCE(407,"existed");
 
     private Integer code;
     private String meaning;

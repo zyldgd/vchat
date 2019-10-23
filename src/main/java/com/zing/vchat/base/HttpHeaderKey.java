@@ -1,9 +1,10 @@
 package com.zing.vchat.base;
 
 public enum HttpHeaderKey {
-    USER_ID("user_id"),
-    USER_PASSWORD("user_password"),
-    USER_TOKEN("user_token");
+    USER_NAME("username"),
+    USER_ID("userId"),
+    USER_PASSWORD("password"),
+    USER_TOKEN("token");
 
     private String Key;
 

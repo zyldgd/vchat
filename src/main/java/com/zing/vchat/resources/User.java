@@ -5,6 +5,7 @@ import com.zing.vchat.JsonElement.ResponseCodeJson;
 import com.zing.vchat.JsonElement.UserJson;
 import com.zing.vchat.base.ResponseCode;
 import com.zing.vchat.cache.UsersCache;
+import com.zing.vchat.dao.UsersDao;
 import com.zing.vchat.message.MessageCollector;
 import com.zing.vchat.util.AuthorizationUtils;
 
@@ -46,6 +47,10 @@ public class User {
     public Response newUser(UserJson userJson) {
         // TODO 首先确认是新用户
         // TODO 写入数据库
+        if (UsersDao.exist(userJson.getUsername())){
+            return Response.ok(new ResponseCodeJson(ResponseCode.EXISTENCE)).build();
+        }
+        UsersDao.insert(userJson);
         UsersCache.crateUserCacheInfo(userJson);
         return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
     }

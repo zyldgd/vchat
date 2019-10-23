@@ -2,7 +2,7 @@
 <html lang="zh">
 
 <head>
-    <title>蓝色登录界面HTML代码</title>
+    <title>摸鱼</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -228,7 +228,7 @@
     }
 
     function checkCookie() {
-        username = getCookie('username')
+        let username = getCookie('username')
         if (username != null && username !== "") {
             alert('Welcome again ' + username + '!')
         } else {
@@ -241,16 +241,16 @@
 </script>
 <script>
 
-    let input_userId = document.getElementById("input_username");
+    let input_username = document.getElementById("input_username");
     let input_password = document.getElementById("input_password");
 
     var notPat1 = new RegExp(/[^0-9a-zA-Z@\\.]/g);
 
-    input_userId.onchange = function () {
+    input_username.onchange = function () {
         this.value = this.value.replace(notPat1, '');
     };
 
-    input_userId.onkeyup = function () {
+    input_username.onkeyup = function () {
         this.value = this.value.replace(notPat1, '');
     };
 
@@ -264,19 +264,19 @@
 
 
     function login() {
-        let userId = input_userId.value;
+        let username = input_username.value;
         let password = input_password.value;
 
-        if (userId === "" || password === "") {
+        if (username === "" || password === "") {
             alert("用户名密码不能为空！");
             return;
         }
-        if (notPat1.test(userId)) {
+        if (notPat1.test(username)) {
             alert("用户名密码不能含有特殊字符！");
             return;
         }
 
-        let header = [{key: "user_id", value: userId}, {key: "user_password", value: password}];
+        let header = [{key: "username", value: username}, {key: "password", value: password}];
 
         ajax("GET", "webapi/login/token", header, null, function (xmlHttpRequest, ev) {
             let type = xmlHttpRequest.getResponseHeader("Content-Type");
@@ -329,5 +329,11 @@
         };
     }
 
+</script>
+<script src="js/shortcut.js"></script>
+<script>
+    shortcut.add("Enter", function () {
+        document.getElementById("btn_login").click();
+    });
 </script>
 </html>

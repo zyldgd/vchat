@@ -14,6 +14,7 @@ public class UserCacheInfo {
 
     public UserCacheInfo(UserJson userJson) {
         this.userJson = userJson;
+        this.userJson.setPassword("******");
         this.massageBox = new MessageBox();
         System.out.println("UserCacheInfo install");
     }

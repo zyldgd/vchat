@@ -1,6 +1,7 @@
 package com.zing.vchat;
 
 import com.zing.vchat.JsonElement.TokenJson;
+import com.zing.vchat.cache.UsersCache;
 import com.zing.vchat.filter.CrossDomainFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -23,6 +24,7 @@ public class RestApplication extends ResourceConfig {
             e.printStackTrace();
         }
 
+        UsersCache.init();
 
 
     }
