@@ -1,7 +1,6 @@
 package com.zing.vchat.JsonElement;
 
 
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -10,10 +9,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class MessageJson {
 
     /**
-     * 该消息的ID
+     * 消息ID
      */
-    @XmlElement(name = "id")
-    private String id;
+    @XmlElement(name = "messageId")
+    private String messageId;
 
     /**
      * 消息内容
@@ -40,10 +39,23 @@ public class MessageJson {
     private String senderId;
 
     /**
-     * 消息所在的会话ID
+     * 接受者ID
      */
-    @XmlElement(name = "conversationId")
-    private String conversationId;
+    @XmlElement(name = "receiverId")
+    private String receiverId;
+    /**
+     * 接受者类型
+     */
+    @XmlElement(name = "messageType")
+    private String messageType;
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getMessageId() {
+        return this.messageId;
+    }
 
     public String getContent() {
         return content;
@@ -77,16 +89,24 @@ public class MessageJson {
         this.senderId = senderId;
     }
 
-    public String getConversationId() {
-        return conversationId;
-    }
-
-    public void setConversationId(String conversationId) {
-        this.conversationId = conversationId;
-    }
-
     @Override
     public String toString() {
-        return String.format("ID:%s  DATE:%s     FORM:%s    TO:%s     CONTENT:%s",id, date,senderId, conversationId,content);
+        return String.format("ID:%s    DATE:%s     FORM:%s    TO:%s     CONTENT:%s", messageId, date, senderId, receiverId, content);
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public String getReceiverId() {
+        return this.receiverId;
     }
 }

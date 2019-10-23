@@ -134,7 +134,7 @@ public class UsersDao {
         DBApi dbApi = new DBApi(DBApi.MOYU_DB);
         Connection connection = dbApi.getConnection();
 
-        String sql = "INSERT INTO users(username, password, nickname, email, avatarPath, remark) VALUES(?,SHA(?),?,?,?,?)";
+        String sql = "INSERT INTO users(username, password, nickname, email, avatarPath, remark, grade) VALUES(?,SHA(?),?,?,?,?,?)";
         try {
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -144,6 +144,7 @@ public class UsersDao {
             preparedStatement.setString(4, userJson.getEmail());
             preparedStatement.setString(5, userJson.getAvatarPath());
             preparedStatement.setString(6, userJson.getRemark());
+            preparedStatement.setInt(7, userJson.getGrade());
             preparedStatement.execute();
             connection.commit();
             preparedStatement.close();

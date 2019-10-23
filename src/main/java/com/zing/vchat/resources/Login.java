@@ -14,7 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.util.Calendar;
+import java.util.Date;
 
 @Singleton
 @Path("login")
@@ -54,6 +58,15 @@ public class Login {
             Token token = UsersCache.setToken(userId);
             TokenJson tokenJson = new TokenJson(userId, token);
             return Response.ok(tokenJson).build();
+            /*
+                Response.ResponseBuilder response = Response.ok()
+                        .cookie(NewCookie.valueOf("userId=" + userId))
+                        .cookie(NewCookie.valueOf("token="+ tokenJson.getToken()))
+                        .contentLocation(URI.create("/"))
+                        .expires(Calendar.getInstance().getTime());
+                return response.build();
+            */
+
         } else {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }

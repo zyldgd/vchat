@@ -20,14 +20,16 @@ public class Messages {
 
 
     /**
-     * 获取消息
+     * 获取消息记录（历史消息）
+     *
      * @param request HTTP 请求
      * @return EventOutput
      */
     @GET
+    @Path("/unread")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response getMessages(@Context HttpServletRequest request) {
-        if(!AuthorizationUtils.isPass(request)){
+    public Response getMessageRecords(@Context HttpServletRequest request, @QueryParam("senderId") String senderId, @QueryParam("messageType") String messageType, @QueryParam("number") Integer number) {
+        if (!AuthorizationUtils.isPass(request)) {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
         return Response.ok(UsersCache.getMessageBox(AuthorizationUtils.getUserId(request)).getMessagesCache()).build();
@@ -36,6 +38,7 @@ public class Messages {
 
     /**
      * 上传消息
+     *
      * @param request HTTP 请求
      * @param message 消息
      * @return 状态码
@@ -44,7 +47,7 @@ public class Messages {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response postMessages(@Context HttpServletRequest request, MessageJson message) {
-        if(!AuthorizationUtils.isPass(request)){
+        if (!AuthorizationUtils.isPass(request)) {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
         MessageCollector.getInstance().putToMessageQueue(message);
@@ -53,6 +56,7 @@ public class Messages {
 
     /**
      * 删除消息
+     *
      * @param request HTTP 请求
      * @param message 消息
      * @return 状态码
@@ -67,6 +71,7 @@ public class Messages {
 
     /**
      * 撤回消息
+     *
      * @param request HTTP 请求
      * @param message 撤回消息的ID, 和消息所在会话的ID
      * @return 状态码

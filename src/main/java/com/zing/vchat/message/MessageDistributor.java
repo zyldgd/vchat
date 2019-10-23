@@ -32,8 +32,8 @@ public class MessageDistributor extends Thread {
         try {
             MessageJson messageJson = MessageQueue.take();
             // 根据消息的发送对象和接受对象，分发给用户
-
-            LinkedList<UserCacheInfo> userCacheInfoList = ConversationCache.getUserCacheInfoList(messageJson.getConversationId());
+            LinkedList<UserCacheInfo> userCacheInfoList = null;
+            //LinkedList<UserCacheInfo> userCacheInfoList = ConversationCache.getUserCacheInfoList(messageJson.getConversationId());
             System.out.println("handing out message from:" + messageJson.getSenderId());
             if (null == userCacheInfoList || userCacheInfoList.isEmpty()) return;
             for (UserCacheInfo userCacheInfo : userCacheInfoList) {
