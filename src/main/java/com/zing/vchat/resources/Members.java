@@ -4,6 +4,7 @@ import com.zing.vchat.JsonElement.ResponseCodeJson;
 import com.zing.vchat.base.ResponseCode;
 import com.zing.vchat.util.AuthorizationUtils;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -40,7 +41,7 @@ public class Members {
      * @param request HTTP 请求
      * @return EventOutput
      */
-    @GET
+    @POST
     @Path("{groupId}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response postMembers(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
@@ -58,7 +59,7 @@ public class Members {
      * @param request HTTP 请求
      * @return EventOutput
      */
-    @GET
+    @DELETE
     @Path("{groupId}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response deleteMembers(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {

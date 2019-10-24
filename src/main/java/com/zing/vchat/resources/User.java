@@ -45,13 +45,12 @@ public class User {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response newUser(UserJson userJson) {
-        // TODO 首先确认是新用户
-        // TODO 写入数据库
         if (UsersDao.exist(userJson.getUsername())){
             return Response.ok(new ResponseCodeJson(ResponseCode.EXISTENCE)).build();
         }
+        System.out.println(userJson);
         UsersDao.insert(userJson);
-        UsersCache.crateUserCacheInfo(userJson);
+        //UsersCache.crateUserCacheInfo(userJson);
         return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
     }
 

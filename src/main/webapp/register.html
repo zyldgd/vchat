@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            border: 0;
+        }
+
+
+        .container {
+            box-shadow: #0000008c 4px 4px 4px 0;
+            width: 330px;
+            margin: 0 auto;
+            padding: 50px 70px;
+            background: #ffffff;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background: #02495a;
+        }
+
+        .title {
+            text-align: center;
+            color: #0085f9;
+        }
+
+        .main-warp {
+            padding-top: 100px;
+            /*background: #8c8c8c;*/
+        }
+
+        .input-warp {
+            margin: 5px;
+        }
+
+        .input-warp label {
+            display: block;
+            font-size: 15px;
+            font-weight: lighter;
+            margin: 35px 0 0 0;
+            color: #8c8c8c;
+        }
+
+
+        .input-warp input {
+            display: block;
+            color: #383838;
+            font-size: medium;
+            font-weight: 200;
+            width: 100%;
+            border: none;
+            transition: border-color 0.4s;
+            border-bottom: 2px solid #eee;
+            outline: none;
+            padding: 10px 0;
+        }
+
+        .input-warp input:hover {
+            border-bottom-color: #37a1ea;
+        }
+
+        .input-warp input:focus {
+            border-bottom-color: #1f76ea;
+        }
+
+        .input-warp span {
+            color: #f0543d;
+        }
+
+        #register {
+            padding: 10px 0;
+            margin: 40px auto 0 auto;
+            width: 100%;
+            background: #666666;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            color: white;
+            background: -webkit-linear-gradient(right, #005bea, #00c6fb);
+            transition: background 1s;
+        }
+
+        #register:hover {
+            background: -webkit-linear-gradient(left, #005bea, #00c6fb);
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="main-warp">
+    <div class="container">
+        <h2 class="title">注 册 新 用 户</h2>
+        <div class="form-warp">
+            <div class="input-warp">
+                <label>昵称 <span>*</span></label>
+                <input type="text" id="nickname" maxlength="16"/>
+            </div>
+            <div class="input-warp">
+                <label>用户名 <span>*</span></label>
+                <input type="text" id="username" maxlength="16"/>
+            </div>
+            <div class="input-warp">
+                <label>密码 <span>*</span></label>
+                <input type="password" id="password1" maxlength="16"/>
+            </div>
+            <div class="input-warp">
+                <label>确认密码 <span>*</span></label>
+                <input type="password" id="password2" maxlength="16"/>
+            </div>
+            <div class="input-warp">
+                <label>邮箱</label>
+                <input type="email" id="email" maxlength="64"/>
+            </div>
+
+            <div class="input-warp">
+                <button type="button" onclick="register()" id="register">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    let input_nickname = document.getElementById("nickname");
+    let input_username = document.getElementById("username");
+    let input_password1 = document.getElementById("password1");
+    let input_password2 = document.getElementById("password2");
+    let input_email = document.getElementById("email");
+
+    bind([input_nickname, input_username, input_password1, input_password2, input_email], new RegExp(/[^0-9a-zA-Z`!@#$%^&~*(){}|?":;',.<>_=+\-/\[\]]/));
+
+    function bind(arrE, notRegExp) {
+        arrE.forEach(function (item, index) {
+            item.onchange = function () {
+                this.value = this.value.replace(notRegExp, '');
+            };
+            item.onkeyup = function () {
+                this.value = this.value.replace(notRegExp, '');
+            };
+        })
+    }
+
+    function register() {
+
+
+
+
+        let nickname = input_nickname.value;
+        let username = input_username.value;
+        let password1 = input_password1.value;
+        let password2 = input_password2.value;
+        let email = input_email.value;
+
+        if (nickname === "" || username === "" || password1 === "" || password2 === "") {
+            alert("请填写必要信息！");
+            return;
+        }
+
+        if (password2 !== password1) {
+            alert("密码输入不一致");
+            return;
+        }
+
+        let user = {
+            userId: null,
+            username: username,
+            nickname: nickname,
+            password: password1,
+            email: email,
+            avatarPath: null,
+            remark: null,
+            grade: null
+        };
+
+
+        let header = [{key: "Content-Type", value: 'application/json'}];
+        a = JSON.stringify(user);
+        ajax("POST", "webapi/user", header, a, function (xmlHttpRequest, ev) {
+
+
+            let type = xmlHttpRequest.getResponseHeader("Content-Type");
+            if (type === 'application/json') {
+                let result = JSON.parse(xmlHttpRequest.responseText);
+                console.log(result);
+
+                // self.location.href="/"
+            } else {
+                console.log(xmlHttpRequest.responseText);
+            }
+        });
+
+
+    }
+
+
+
+    function ajax(method, url, header, data  , callback) {
+        let xmlHttpRequest;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlHttpRequest = new XMLHttpRequest();
+        } else {// code for IE6, IE5
+            xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlHttpRequest.timeout = 5000;
+        xmlHttpRequest.ontimeout = function (ev) {
+            alert("请求超时！");
+        };
+        xmlHttpRequest.open(method, url, true);
+
+        if (header !== null) {
+            header.forEach(function (item, index) {
+                xmlHttpRequest.setRequestHeader(item.key, item.value);
+            });
+        }
+
+        console.log(data);
+        xmlHttpRequest.send(data);
+        xmlHttpRequest.onreadystatechange = function (ev) {
+            if (xmlHttpRequest.readyState === 4 && xmlHttpRequest.status === 200) {
+                callback(xmlHttpRequest, ev);
+                /*var type=request.getResponseHeader("Content-Type");
+               if(type.indexOf("xml") !== -1 && request.responseXML){
+                   callback(request.responseXML); //Document对象响应
+               }else if(type=== 'application/json'){
+                   callback(JSON.parse(request.responseText)) //JSON响应
+               }else {
+                   callback(request.responseText);
+               }*/
+            }
+        };
+    }
+</script>
+</html>

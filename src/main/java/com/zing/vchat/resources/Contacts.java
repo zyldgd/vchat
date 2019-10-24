@@ -1,78 +1,70 @@
 package com.zing.vchat.resources;
 
-import com.zing.vchat.JsonElement.GroupJson;
+import com.zing.vchat.JsonElement.ContactJson;
 import com.zing.vchat.JsonElement.ResponseCodeJson;
 import com.zing.vchat.base.ResponseCode;
 import com.zing.vchat.util.AuthorizationUtils;
 
-import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
-@Singleton
-@Path("groups")
-public class Groups {
+public class Contacts {
 
     /**
-     * 获取群信息
+     * 获取通讯录
      *
      * @param request HTTP 请求
      * @return EventOutput
      */
     @GET
-    @Path("{groupId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getGroup(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
+    public Response getContacts(@Context HttpServletRequest request) {
         if (!AuthorizationUtils.isPass(request)) {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
-        // TODO 返回ID为groupId的群信息
+        // TODO  获取用户通讯录
         return Response.ok().build();
     }
 
 
     /**
-     * 新建群
+     * 添加通信录信息
      *
      * @param request HTTP 请求
      * @return EventOutput
      */
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response postGroup(@Context HttpServletRequest request, GroupJson groupJson) {
+    public Response postContact(@Context HttpServletRequest request, @QueryParam("ContactId") String ContactId, @QueryParam("ContactType") String ContactType) {
         if (!AuthorizationUtils.isPass(request)) {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
-        // TODO 返回ID为groupId的群信息
+        // TODO  添加通信录信息
         return Response.ok().build();
     }
 
 
     /**
-     * 解散群
+     * 删除通信录信息
      *
      * @param request HTTP 请求
      * @return EventOutput
      */
     @DELETE
-    @Path("{groupId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response deleteGroup(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
+    public Response deleteContact(@Context HttpServletRequest request, @QueryParam("ContactId") String ContactId, @QueryParam("ContactType") String ContactType) {
         if (!AuthorizationUtils.isPass(request)) {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
-        // TODO 返回ID为groupId的群信息
+        // TODO  删除通信录信息
         return Response.ok().build();
     }
 
-
     /**
-     * 修改群信息
+     * 修改通信录信息
      *
      * @param request HTTP 请求
      * @return EventOutput
@@ -80,12 +72,11 @@ public class Groups {
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response putGroup(@Context HttpServletRequest request, GroupJson groupJson) {
+    public Response putContact(@Context HttpServletRequest request, ContactJson contactJson) {
         if (!AuthorizationUtils.isPass(request)) {
             return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
         }
-        // TODO 修改群昵称，图片，公告；群成员通过Members接口实现。
+        // TODO  删除通信录信息
         return Response.ok().build();
     }
-
 }

@@ -80,6 +80,7 @@ public class UsersDao {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             if (resultSet.next()) {
                 isExist = resultSet.getBoolean(1);
             }
@@ -142,9 +143,9 @@ public class UsersDao {
             preparedStatement.setString(2, userJson.getPassword());
             preparedStatement.setString(3, userJson.getNickname());
             preparedStatement.setString(4, userJson.getEmail());
-            preparedStatement.setString(5, userJson.getAvatarPath());
+            preparedStatement.setString(5, null);
             preparedStatement.setString(6, userJson.getRemark());
-            preparedStatement.setInt(7, userJson.getGrade());
+            preparedStatement.setInt(7, 1);
             preparedStatement.execute();
             connection.commit();
             preparedStatement.close();
