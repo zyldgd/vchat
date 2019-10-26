@@ -1,8 +1,7 @@
 package com.zing.vchat.resources;
 
 import com.zing.vchat.JsonElement.GroupJson;
-import com.zing.vchat.JsonElement.ResponseCodeJson;
-import com.zing.vchat.base.ResponseCode;
+import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.util.AuthorizationUtils;
 
 import javax.inject.Singleton;
@@ -28,7 +27,7 @@ public class Groups {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getGroup(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         // TODO 返回ID为groupId的群信息
         return Response.ok().build();
@@ -46,7 +45,7 @@ public class Groups {
     @Produces({MediaType.APPLICATION_JSON})
     public Response postGroup(@Context HttpServletRequest request, GroupJson groupJson) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         // TODO 返回ID为groupId的群信息
         return Response.ok().build();
@@ -64,7 +63,7 @@ public class Groups {
     @Produces({MediaType.APPLICATION_JSON})
     public Response deleteGroup(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         // TODO 返回ID为groupId的群信息
         return Response.ok().build();
@@ -82,7 +81,7 @@ public class Groups {
     @Produces({MediaType.APPLICATION_JSON})
     public Response putGroup(@Context HttpServletRequest request, GroupJson groupJson) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         // TODO 修改群昵称，图片，公告；群成员通过Members接口实现。
         return Response.ok().build();

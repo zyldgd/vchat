@@ -14,9 +14,10 @@ public class UserCacheInfo {
 
     public UserCacheInfo(UserJson userJson) {
         this.userJson = userJson;
+        this.token = new Token();
         this.userJson.setPassword("******");
         this.massageBox = new MessageBox();
-        System.out.println("UserCacheInfo install");
+        System.out.println("[INFO] "+ userJson.getUsername() + " UserCacheInfo Created!");
     }
 
     public void deleteEventOutput() {
@@ -24,7 +25,7 @@ public class UserCacheInfo {
             this.massageBox.getEventOutput().close();
             this.massageBox.deleteEventOutput();
         } catch (IOException | NullPointerException e) {
-            System.out.println("NullPointerException");
+            System.out.println("[ERROR] NullPointerException in UserCacheInfo.java");
         }
     }
 

@@ -1,9 +1,9 @@
 package com.zing.vchat.resources;
 
-import com.zing.vchat.JsonElement.ResponseCodeJson;
 import com.zing.vchat.JsonElement.TokenJson;
+import com.zing.vchat.JsonElement.UserJson;
 import com.zing.vchat.base.HttpHeaderKey;
-import com.zing.vchat.base.ResponseCode;
+import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.base.Token;
 import com.zing.vchat.cache.UsersCache;
 import com.zing.vchat.dao.UsersDao;
@@ -29,9 +29,9 @@ public class Login {
     @Produces({MediaType.APPLICATION_JSON})
     public Response login(@Context HttpServletRequest request) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
-        return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
+        return Response.ok().build();
     }
 
 
@@ -40,11 +40,11 @@ public class Login {
     @Produces({MediaType.APPLICATION_JSON})
     public Response deleteToken(@Context HttpServletRequest request) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         String userId = request.getHeader(HttpHeaderKey.USER_ID.toString());
         UsersCache.deleteToken(userId);
-        return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
+        return Response.ok().build();
     }
 
 
@@ -54,9 +54,10 @@ public class Login {
     public Response getToken(@Context HttpServletRequest request) {
         String username = request.getHeader(HttpHeaderKey.USER_NAME.toString());
         if (AuthorizationUtils.verify(request)) {
-            String userId = UsersDao.queryByName(username).getUserId();
-            Token token = UsersCache.setToken(userId);
-            TokenJson tokenJson = new TokenJson(userId, token);
+            UserJson userJson = UsersDao.queryByName(username);
+            UsersCache.crateUserCacheInfo(userJson);
+            Response.ResponseBuilder response = Response.ok();
+            TokenJson tokenJson = new TokenJson(userJson.getUserId(), UsersCache.getToken(userJson.getUserId()).getToken().toString());
             return Response.ok(tokenJson).build();
             /*
                 Response.ResponseBuilder response = Response.ok()
@@ -68,7 +69,7 @@ public class Login {
             */
 
         } else {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
     }
 }

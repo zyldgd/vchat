@@ -1,4 +1,5 @@
 package com.zing.vchat.JsonElement;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,6 +16,14 @@ public class ContactJson {
     @XmlElement(name = "remarkName")
     private String remarkName;
 
+    public ContactJson() {
+    }
+
+    public ContactJson(String contactId, String type, String remarkName) {
+        this.contactId = contactId;
+        this.type = type;
+        this.remarkName = remarkName;
+    }
 
     public String getContactId() {
         return contactId;
@@ -38,5 +47,10 @@ public class ContactJson {
 
     public void setRemarkName(String remarkName) {
         this.remarkName = remarkName;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("contactId:%-10s  type:%-10s  remarkName:%-10s ", contactId, type, remarkName);
     }
 }

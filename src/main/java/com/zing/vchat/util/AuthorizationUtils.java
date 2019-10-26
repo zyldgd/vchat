@@ -13,6 +13,7 @@ public class AuthorizationUtils {
     public static boolean isPass(HttpServletRequest request) {
         String userId = request.getHeader(HttpHeaderKey.USER_ID.toString());
         String token_str = request.getHeader(HttpHeaderKey.USER_TOKEN.toString());
+        if (null == UsersCache.getToken(userId)) return false;
         return UsersCache.getToken(userId).isValid(token_str);
     }
 

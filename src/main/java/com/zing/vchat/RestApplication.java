@@ -23,9 +23,6 @@ public class RestApplication extends ResourceConfig {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        UsersCache.init();
-
-
+        //UsersCache.init();
     }
 }

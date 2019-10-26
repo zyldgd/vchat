@@ -16,7 +16,7 @@ public class MessageDistributor extends Thread {
 
     private static MessageDistributor messageDistributor = new MessageDistributor();
 
-    public static MessageDistributor getInstance(){
+    public static MessageDistributor getInstance() {
         return messageDistributor;
     }
 
@@ -24,17 +24,18 @@ public class MessageDistributor extends Thread {
         MessageQueue.add(messageJson);
     }
 
-    private MessageDistributor(){
+    private MessageDistributor() {
         this.start();
     }
 
     private void ProcessMessages() {
         try {
             MessageJson messageJson = MessageQueue.take();
-            // 根据消息的发送对象和接受对象，分发给用户
             LinkedList<UserCacheInfo> userCacheInfoList = null;
-            //LinkedList<UserCacheInfo> userCacheInfoList = ConversationCache.getUserCacheInfoList(messageJson.getConversationId());
-            System.out.println("handing out message from:" + messageJson.getSenderId());
+
+            // LinkedList<UserCacheInfo> userCacheInfoList = ConversationCache.getUserCacheInfoList(messageJson.getConversationId());
+
+            System.out.println("[INFO] handing out message from:" + messageJson.getSenderId());
             if (null == userCacheInfoList || userCacheInfoList.isEmpty()) return;
             for (UserCacheInfo userCacheInfo : userCacheInfoList) {
                 userCacheInfo.getMassageBox().putToMessageQueue(messageJson);
@@ -48,7 +49,7 @@ public class MessageDistributor extends Thread {
     @Override
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
-        System.out.println("MessageDistributor started!");
+        System.out.println("[INFO] MessageDistributor started!");
         while (true) {
             ProcessMessages();
         }

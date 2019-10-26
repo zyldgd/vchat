@@ -23,7 +23,7 @@ public class MessageBox {
 
     @SuppressWarnings("InfiniteLoopStatement")
     private void ProcessMessages() {
-        System.out.println("MessageBox ProcessMessages!");
+        System.out.println("[INFO] MessageBox ProcessMessages!");
         new Thread(() -> {
             while (true) {
                 try {

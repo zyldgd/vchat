@@ -1,12 +1,12 @@
 package com.zing.vchat.resources;
 
-import com.zing.vchat.JsonElement.MessageJson;
-import com.zing.vchat.JsonElement.ResponseCodeJson;
+
 import com.zing.vchat.JsonElement.UserJson;
-import com.zing.vchat.base.ResponseCode;
+import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.cache.UsersCache;
+import com.zing.vchat.dao.ContactsDao;
+import com.zing.vchat.dao.MessagesDao;
 import com.zing.vchat.dao.UsersDao;
-import com.zing.vchat.message.MessageCollector;
 import com.zing.vchat.util.AuthorizationUtils;
 
 import javax.inject.Singleton;
@@ -30,7 +30,7 @@ public class User {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUser(@Context HttpServletRequest request) {
         if (!AuthorizationUtils.isPass(request)){
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         return Response.ok(UsersCache.getUserCacheInfo(AuthorizationUtils.getUserId(request)).getUserJson()).build();
     }
@@ -46,12 +46,13 @@ public class User {
     @Produces({MediaType.APPLICATION_JSON})
     public Response newUser(UserJson userJson) {
         if (UsersDao.exist(userJson.getUsername())){
-            return Response.ok(new ResponseCodeJson(ResponseCode.EXISTENCE)).build();
+            return Response.status(StatusCode.Conflict.getCode()).build();
         }
-        System.out.println(userJson);
         UsersDao.insert(userJson);
-        //UsersCache.crateUserCacheInfo(userJson);
-        return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
+        String userId = UsersDao.queryByName(userJson.getUsername()).getUserId();
+        MessagesDao.createMessageTable(userId);
+        ContactsDao.createContactsTable(userId);
+        return Response.ok().build();
     }
 
 

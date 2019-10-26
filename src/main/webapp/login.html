@@ -2,7 +2,7 @@
 <html lang="zh">
 
 <head>
-    <title>摸鱼</title>
+    <title>摸鱼-登录</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -295,14 +295,14 @@
 
     }
 
-    function ajax(method, url, header, date, callback) {
+    function ajax(method, url, header, data, callback) {
         let xmlHttpRequest;
         if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
             xmlHttpRequest = new XMLHttpRequest();
         } else {// code for IE6, IE5
             xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        xmlHttpRequest.timeout = 5000;
+        xmlHttpRequest.timeout = 10000;
         xmlHttpRequest.ontimeout = function (ev) {
             alert("请求超时！");
         };
@@ -312,8 +312,8 @@
             xmlHttpRequest.setRequestHeader(item.key, item.value);
         });
 
-        xmlHttpRequest.send(date);
-        console.log("send date:" + date);
+        xmlHttpRequest.send(data);
+        console.log("send date:" + data);
         xmlHttpRequest.onreadystatechange = function (ev) {
             if (xmlHttpRequest.readyState === 4 && xmlHttpRequest.status === 200) {
                 callback(xmlHttpRequest, ev);

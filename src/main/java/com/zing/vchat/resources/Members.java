@@ -1,10 +1,8 @@
 package com.zing.vchat.resources;
 
-import com.zing.vchat.JsonElement.ResponseCodeJson;
-import com.zing.vchat.base.ResponseCode;
+import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.util.AuthorizationUtils;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -28,7 +26,7 @@ public class Members {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getMembers(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         // TODO 返回ID为groupId的群成员信息
         return Response.ok().build();
@@ -46,7 +44,7 @@ public class Members {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response postMembers(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         // TODO 向ID为groupId的群添加新成员
         return Response.ok().build();
@@ -64,7 +62,7 @@ public class Members {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response deleteMembers(@Context HttpServletRequest request, @PathParam("groupId") String groupId) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         // TODO 删除成员信息
         return Response.ok().build();

@@ -3,9 +3,8 @@ package com.zing.vchat.resources;
 
 import com.zing.vchat.JsonElement.ConversationJson;
 import com.zing.vchat.JsonElement.MessageJson;
-import com.zing.vchat.JsonElement.ResponseCodeJson;
-import com.zing.vchat.base.HttpHeaderKey;
-import com.zing.vchat.base.ResponseCode;
+
+import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.cache.ConversationCache;
 import com.zing.vchat.util.AuthorizationUtils;
 
@@ -31,11 +30,11 @@ public class Conversation {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getConversations(@Context HttpServletRequest request, @PathParam("conversationId") String conversationId) {
         if(!AuthorizationUtils.isPass(request)){
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         ConversationJson conversationJson = ConversationCache.getConversation(conversationId);
         if (null == conversationJson){
-            return Response.ok(new ResponseCodeJson(ResponseCode.INEXISTENCE)).build();
+            return Response.status(StatusCode.NoContent.getCode()).build();
         }
 
         return Response.ok(conversationJson).build();

@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+
+
 public class UsersDao {
 
     public static UserJson queryById(String userId) {
@@ -131,10 +133,9 @@ public class UsersDao {
         return re;
     }
 
-    public static void insert(UserJson userJson) {
+    public static boolean insert(UserJson userJson) {
         DBApi dbApi = new DBApi(DBApi.MOYU_DB);
         Connection connection = dbApi.getConnection();
-
         String sql = "INSERT INTO users(username, password, nickname, email, avatarPath, remark, grade) VALUES(?,SHA(?),?,?,?,?,?)";
         try {
             connection.setAutoCommit(false);
@@ -151,7 +152,23 @@ public class UsersDao {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
+    }
+
+    public static boolean update(UserJson userJson) {
+        DBApi dbApi = new DBApi(DBApi.MOYU_DB);
+        Connection connection = dbApi.getConnection();
+        //TODO 更新用户信息
+        return false;
+    }
+
+    public static boolean delete(String userId) {
+        DBApi dbApi = new DBApi(DBApi.MOYU_DB);
+        Connection connection = dbApi.getConnection();
+        //TODO 注销用户
+        return false;
     }
 
     private static UserJson getUserJson(ResultSet resultSet) throws SQLException {
@@ -168,15 +185,6 @@ public class UsersDao {
     }
 
     public static void main(String[] args) {
-        UsersDao uersDao = new UsersDao();
 
-//            UserJson userJson = new UserJson();
-//            userJson.setUsername("ping");
-//            userJson.setPassword("123123000");
-//            userJson.setNickname("zfp");
-//            uersDao.insert(userJson);
-
-        boolean b = UsersDao.exist("ping");
-        System.out.println(b);
     }
 }

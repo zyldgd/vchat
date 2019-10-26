@@ -1,6 +1,7 @@
 package com.zing.vchat.message;
 
 import com.zing.vchat.JsonElement.MessageJson;
+import com.zing.vchat.dao.MessagesDao;
 
 import javax.inject.Singleton;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -16,7 +17,7 @@ public class MessageCollector extends Thread {
 
     public void putToMessageQueue(MessageJson messageJson) {
         MessageQueue.add(messageJson);
-        System.out.println("get new message from:" + messageJson.getSenderId());
+        System.out.println("[INFO] Get new message: " + messageJson);
     }
 
     private MessageCollector() {
@@ -26,8 +27,8 @@ public class MessageCollector extends Thread {
     private void ProcessMessages() {
         try {
             MessageJson messageJson = MessageQueue.take();
+            MessagesDao.insert(messageJson);
             MessageDistributor.getInstance().putToMessageQueue(messageJson);
-            // TODO 发送给消息分发器 并 添加到数据库中
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -36,7 +37,7 @@ public class MessageCollector extends Thread {
     @Override
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
-        System.out.println("MessageCollector started!");
+        System.out.println("[INFO] MessageCollector started!");
         while (true) {
             ProcessMessages();
         }

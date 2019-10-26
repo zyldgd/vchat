@@ -1,8 +1,7 @@
 package com.zing.vchat.resources;
 
 import com.zing.vchat.JsonElement.MessageJson;
-import com.zing.vchat.JsonElement.ResponseCodeJson;
-import com.zing.vchat.base.ResponseCode;
+import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.cache.UsersCache;
 import com.zing.vchat.message.MessageCollector;
 import com.zing.vchat.util.AuthorizationUtils;
@@ -30,7 +29,7 @@ public class Messages {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getMessageRecords(@Context HttpServletRequest request, @QueryParam("senderId") String senderId, @QueryParam("messageType") String messageType, @QueryParam("number") Integer number) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         return Response.ok(UsersCache.getMessageBox(AuthorizationUtils.getUserId(request)).getMessagesCache()).build();
     }
@@ -48,10 +47,10 @@ public class Messages {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response postMessages(@Context HttpServletRequest request, MessageJson message) {
         if (!AuthorizationUtils.isPass(request)) {
-            return Response.ok(new ResponseCodeJson(ResponseCode.FAIL)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         MessageCollector.getInstance().putToMessageQueue(message);
-        return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
+        return Response.ok().build();
     }
 
     /**

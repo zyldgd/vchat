@@ -1,8 +1,7 @@
 package com.zing.vchat.resources;
 
 
-import com.zing.vchat.JsonElement.ResponseCodeJson;
-import com.zing.vchat.base.ResponseCode;
+import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.cache.UsersCache;
 import com.zing.vchat.util.AuthorizationUtils;
 import org.glassfish.jersey.media.sse.EventOutput;
@@ -46,10 +45,10 @@ public class EventSource {
     public Response deleteEventOutput(@Context HttpServletRequest request) {
         if(!AuthorizationUtils.isPass(request)){
             System.out.println("UnAuthorization");
-            return Response.ok(new ResponseCodeJson(ResponseCode.INEXISTENCE)).build();
+            return Response.status(StatusCode.Forbidden.getCode()).build();
         }
         UsersCache.deleteEventOutput(request.getHeader("userId"));
-        return Response.ok(new ResponseCodeJson(ResponseCode.SUCCEED)).build();
+        return Response.ok().build();
     }
 
 }

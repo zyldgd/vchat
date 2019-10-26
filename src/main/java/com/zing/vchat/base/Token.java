@@ -43,12 +43,12 @@ public class Token {
         this.expiration = calendar.getTime();
     }
 
-    public boolean isValid(){
+    public boolean isValid() {
         if (null == token) return false;
         return this.expiration.after(new Date());
     }
 
-    public boolean isValid(String token_str){
+    public boolean isValid(String token_str) {
         if (null == this.token || null == token_str) return false;
         if (!this.token.toString().equals(token_str)) return false;
         return this.expiration.after(new Date());
@@ -56,12 +56,7 @@ public class Token {
 
     @Override
     public String toString() {
-        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return String.format("token: %s , valid: %6s ,  expiration: %s", this.token.toString(), this.isValid(), df.format(this.expiration));
-    }
-
-    public static void main(String[] args) {
-        Token t = new Token();
-        System.out.println(t);
     }
 }

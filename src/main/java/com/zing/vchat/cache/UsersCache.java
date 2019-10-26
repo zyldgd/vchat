@@ -13,7 +13,7 @@ public class UsersCache {
     private static Map<String, UserCacheInfo> usersCacheInfo = new ConcurrentHashMap<>(1000);
 
     public static void crateUserCacheInfo(UserJson userJson) {
-        if (usersCacheInfo.containsKey(userJson.getUserId())) return;
+        if (null == userJson.getUserId() || usersCacheInfo.containsKey(userJson.getUserId())) return;
         usersCacheInfo.put(userJson.getUserId(), new UserCacheInfo(userJson));
     }
 
@@ -23,7 +23,7 @@ public class UsersCache {
 
     public static Token getToken(String userId) {
         UserCacheInfo info = usersCacheInfo.get(userId);
-        //        if (null == info) return null;
+        if (null == info) return null;
         return info.getToken();
     }
 
@@ -51,13 +51,11 @@ public class UsersCache {
         return usersCacheInfo.get(userId);
     }
 
+    @Deprecated
     public static void init() {
         usersCacheInfo.clear();
-        System.out.println("UsersCache init start!");
         for (UserJson userJson : UsersDao.getAll()) {
             UsersCache.crateUserCacheInfo(userJson);
-            System.out.println(userJson);
         }
-        System.out.println("UsersCache init end!");
     }
 }
