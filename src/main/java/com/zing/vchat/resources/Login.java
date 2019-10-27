@@ -56,7 +56,7 @@ public class Login {
         if (AuthorizationUtils.verify(request)) {
             UserJson userJson = UsersDao.queryByName(username);
             UsersCache.crateUserCacheInfo(userJson);
-            Response.ResponseBuilder response = Response.ok();
+            //Response.ResponseBuilder response = Response.ok();
             TokenJson tokenJson = new TokenJson(userJson.getUserId(), UsersCache.getToken(userJson.getUserId()).getToken().toString());
             return Response.ok(tokenJson).build();
             /*

@@ -35,13 +35,20 @@ public class MessageDistributor extends Thread {
             // 私聊 or 群聊
             if (messageJson.getMessageType().equals("private")){
                 String receiverId = messageJson.getReceiverId();
-                UsersCache.getMessageBox(receiverId).ProcessMessage(messageJson);
+                MessageBox messageBox = UsersCache.getMessageBox(receiverId);
+                if (null != messageBox){
+                    UsersCache.getMessageBox(receiverId).ProcessMessage(messageJson);
+                }
             }else{
                 String receiverId = messageJson.getReceiverId();
                 LinkedList<String> memberIds = GroupDao.getAllMemberId(receiverId);
                 if (memberIds != null) {
                     for (String memberId :memberIds) {
-                        UsersCache.getMessageBox(memberId).ProcessMessage(messageJson);
+                        MessageBox messageBox = UsersCache.getMessageBox(memberId);
+                        if (null != messageBox){
+                            UsersCache.getMessageBox(memberId).ProcessMessage(messageJson);
+                        }
+
                     }
                 }
             }

@@ -32,7 +32,6 @@ public class AuthorizationUtils {
     public static boolean verify(HttpServletRequest request) {
         String username = request.getHeader(HttpHeaderKey.USER_NAME.toString());
         String password = request.getHeader(HttpHeaderKey.USER_PASSWORD.toString());
-        System.out.println(username + " / " + password);
         return UsersDao.verifyBuName(username, password);
     }
 }
