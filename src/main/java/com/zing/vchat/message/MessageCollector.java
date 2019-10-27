@@ -1,9 +1,12 @@
 package com.zing.vchat.message;
 
 import com.zing.vchat.JsonElement.MessageJson;
+import com.zing.vchat.cache.UsersCache;
+import com.zing.vchat.dao.GroupDao;
 import com.zing.vchat.dao.MessagesDao;
 
 import javax.inject.Singleton;
+import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Singleton
@@ -27,7 +30,16 @@ public class MessageCollector extends Thread {
     private void ProcessMessages() {
         try {
             MessageJson messageJson = MessageQueue.take();
-            MessagesDao.insert(messageJson);
+            if (messageJson.getMessageType().equals("private")) {
+                MessagesDao.putMessageTo(messageJson, messageJson.getReceiverId());
+            }else{
+                LinkedList<String> memberIds = GroupDao.getAllMemberId(messageJson.getReceiverId());
+                if (memberIds != null) {
+                    for (String memberId :memberIds) {
+                        MessagesDao.putMessageTo(messageJson, memberId);
+                    }
+                }
+            }
             MessageDistributor.getInstance().putToMessageQueue(messageJson);
         } catch (InterruptedException e) {
             e.printStackTrace();

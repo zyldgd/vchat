@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessageBox {
     private EventOutput eventOutput;
-    private LinkedBlockingQueue<MessageJson> messagesCache = new LinkedBlockingQueue<MessageJson>(50);
+    private LinkedBlockingQueue<MessageJson> messagesCache = new LinkedBlockingQueue<>(50);
     private LinkedBlockingQueue<MessageJson> messageQueue = new LinkedBlockingQueue<>(50);
     private static OutboundEvent outboundEvent = new OutboundEvent.Builder().name("newMessage").data(1).build();
 
@@ -28,7 +28,7 @@ public class MessageBox {
             while (true) {
                 try {
                     MessageJson messageJson = messageQueue.take();
-                    if (!this.eventOutput.isClosed()) {
+                    if (null != this.eventOutput && !this.eventOutput.isClosed()) {
                         this.eventOutput.write(new OutboundEvent.Builder().name("newMessage").data(MessageJson.class, messageJson).build());
                     }
                 } catch (InterruptedException | IOException e) {
@@ -45,18 +45,14 @@ public class MessageBox {
      */
     public void ProcessMessage(MessageJson message) {
         new Thread(() -> {
-            if (null != this.eventOutput) {
+            if (null != this.eventOutput && !this.eventOutput.isClosed()) {
                 try {
                     this.eventOutput.write(new OutboundEvent.Builder().name("messagesCache").data(MessageJson.class, message).build());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                if (messagesCache.remainingCapacity() == 0) {
-                    messagesCache.remove();
-                }
-                messagesCache.add(message);
             }
+            System.out.println("[INFO] MessageBox end!");
         }).start();
     }
 

@@ -7,6 +7,7 @@ import com.zing.vchat.JsonElement.MessageJson;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GroupDao {
@@ -69,6 +70,12 @@ public class GroupDao {
 
     public static GroupJson queryGroupById(String groupId){
         // TODO 查询组信息
+        return null;
+    }
+
+
+    public static LinkedList<String> getAllMemberId (String groupId){
+        // TODO 返回组群内所有成员ID
         return null;
     }
 

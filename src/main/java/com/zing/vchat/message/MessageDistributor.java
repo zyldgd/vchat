@@ -5,6 +5,7 @@ import com.zing.vchat.JsonElement.MessageJson;
 import com.zing.vchat.cache.ConversationCache;
 import com.zing.vchat.cache.UserCacheInfo;
 import com.zing.vchat.cache.UsersCache;
+import com.zing.vchat.dao.GroupDao;
 
 import javax.inject.Singleton;
 import java.util.LinkedList;
@@ -31,16 +32,19 @@ public class MessageDistributor extends Thread {
     private void ProcessMessages() {
         try {
             MessageJson messageJson = MessageQueue.take();
-            LinkedList<UserCacheInfo> userCacheInfoList = null;
-
-            // LinkedList<UserCacheInfo> userCacheInfoList = ConversationCache.getUserCacheInfoList(messageJson.getConversationId());
-
-            System.out.println("[INFO] handing out message from:" + messageJson.getSenderId());
-            if (null == userCacheInfoList || userCacheInfoList.isEmpty()) return;
-            for (UserCacheInfo userCacheInfo : userCacheInfoList) {
-                userCacheInfo.getMassageBox().putToMessageQueue(messageJson);
+            // 私聊 or 群聊
+            if (messageJson.getMessageType().equals("private")){
+                String receiverId = messageJson.getReceiverId();
+                UsersCache.getMessageBox(receiverId).ProcessMessage(messageJson);
+            }else{
+                String receiverId = messageJson.getReceiverId();
+                LinkedList<String> memberIds = GroupDao.getAllMemberId(receiverId);
+                if (memberIds != null) {
+                    for (String memberId :memberIds) {
+                        UsersCache.getMessageBox(memberId).ProcessMessage(messageJson);
+                    }
+                }
             }
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
