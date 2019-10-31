@@ -12,6 +12,10 @@
             border: 0;
         }
 
+        ul, li, ol {
+            list-style: none;
+        }
+
         html, body {
             height: 100%;
             width: 100%;
@@ -68,6 +72,7 @@
             width: 100%;
             height: 100%;
             background: #303b4f;
+            overflow-y: auto;
         }
 
         #right-warp-top {
@@ -81,6 +86,9 @@
         #right-warp-messageBox {
             width: 100%;
             height: 100%;
+            /*noinspection CssInvalidPropertyValue*/
+            overflow: overlay;
+            overflow-x: hidden;
             /*background: #f99ab5;*/
         }
 
@@ -276,6 +284,7 @@
         }
 
         #text-send {
+            font-size: 15px;
             overflow-y: auto;
             width: 96%;
             height: 80%;
@@ -286,6 +295,11 @@
             background-color: white;
             border-radius: 5px;
             color: #6f6f6f;
+            white-space: pre-wrap;
+        }
+        #text-send img {
+            max-width: 50px;
+            max-height: 50px;
         }
 
         #right-warp-bottom {
@@ -311,25 +325,110 @@
 
 
     </style>
-    <style>
-        #text-send::-webkit-scrollbar { /*滚动条整体样式*/
+    <style type="text/css">
+        .scrollbar::-webkit-scrollbar { /*滚动条整体样式*/
             width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
             height: 1px;
         }
 
-        #text-send::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+        .scrollbar::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
             border-radius: 10px;
-            /*background: #CCCCCC;*/
         }
 
-        #text-send:hover::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
-            /*border-radius: 10px;*/
-            background: #CCCCCC;
+        .scrollbar:hover::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+            background: #b7b7b7;
         }
 
-        #text-send::-webkit-scrollbar-track { /*滚动条里面轨道*/
-
+        .scrollbar::-webkit-scrollbar-track { /*滚动条里面轨道*/
         }
+
+    </style>
+    <style type="text/css">
+        #chat-list {
+            list-style: none;
+            padding: 0 10px;
+        }
+
+        .chat-line {
+            margin: 10px 0;
+            display: grid;
+            grid-template-columns: 70px auto;
+        }
+
+        .chat-avatar {
+            text-align: center;
+        }
+
+        .chat-content {
+            padding: 0 5px;
+        }
+
+        .chat-content-word {
+            display: inline-block;
+            min-width: 20px;
+            max-width: 500px;
+            border-radius: 3px;
+            background-color: white;
+            box-shadow: #00000014 0 0 6px 0;
+            padding: 7px 10px;
+            color: #656565;
+            word-break: break-all;
+        }
+
+        .chat-content-word pre {
+            font-family: 微软雅黑, sans-serif;
+            max-width: 470px;
+            font-size: 15px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .chat-avatar-img {
+            margin-top: 10px;
+            background: white;
+            border-radius: 50%;
+            width: 50px;
+        }
+
+        .chat-content-info {
+            padding: 2px;
+            color: #bdbdbd;
+            font-size: xx-small;
+        }
+
+        .chat-line-right {
+            margin: 10px 0;
+            display: grid;
+            grid-template-columns: auto 70px;
+        }
+
+        .chat-line-right .chat-content {
+            text-align: right;
+        }
+
+        .chat-line-right .chat-content-word {
+            margin: auto 0 0 auto;
+        }
+
+        .chat-line-right .chat-content-word {
+            text-align: left;
+            color: white;
+            background-color: #027991;
+        }
+
+        .chat-tip {
+            margin: 5px auto;
+            text-align: center;
+        }
+
+        .chat-tip span {
+            font-size: x-small;
+            color: #919191;
+            font-family: 微软雅黑, sans-serif;
+            background-color: #dddddd;
+            border-radius: 10px;
+        }
+
 
     </style>
 </head>
@@ -342,7 +441,7 @@
                     <img src="images/avatar.jpeg" alt="头像"/>
                 </div>
                 <div id="user-warp-info">
-                    <span>username</span>
+                    <span id="nickname-show">nickname</span>
                 </div>
             </div>
 
@@ -361,7 +460,98 @@
                 <label for="select03"><i class="iconfont icontongzhi"></i></label>
             </div>
         </div>
-        <div id="left-warp-bottom">
+        <div id="left-warp-bottom" class="scrollbar">
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
             <div class="list-item">
                 <div class="list-item-left">
                     <img src="images/avatar.jpeg" alt="头像"/>
@@ -412,8 +602,114 @@
                 <span><i class="iconfont iconweibiaoti15"></i></span>
             </div>
         </div>
-        <div id="right-warp-messageBox">
+        <div id="right-warp-messageBox" class="scrollbar">
+            <ul id="chat-list">
 
+                <li class="chat-tip">
+                    <span>123</span>
+                </li>
+
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line">
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>敌以带我丢我达克赛德UI奥斯迪阿武哥</pre>
+                        </div>
+                    </div>
+                </li>
+                <li class="chat-line-right">
+                    <div class="chat-content">
+                        <div class="chat-content-info">阿斯顿</div>
+                        <div class="chat-content-word">
+                            <pre>asdasa</pre>
+                        </div>
+                    </div>
+                    <div class="chat-avatar">
+                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                    </div>
+                </li>
+
+            </ul>
         </div>
         <div id="right-warp-tools">
             <div id="tool-faces" title="表情">
@@ -427,18 +723,19 @@
             </div>
         </div>
         <div id="right-warp-text">
-            <pre id="text-send" contenteditable="true"></pre>
+            <pre id="text-send" class="scrollbar" contenteditable="true"></pre>
         </div>
         <div id="right-warp-bottom" title="发送信息">
             <div id="button-send"><i class="btn-send tool-font iconfont iconfasong"></i></div>
         </div>
     </div>
 </div>
+
 <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
 <script>
     L2Dwidget.init({
         "model": {
-            jsonPath: "https://unpkg.com/live2d-widget-model-z16@1.0.5/assets/z16.model.json",
+            jsonPath: "https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json",
             "scale": 1
         },
         "display": {
