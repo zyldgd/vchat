@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>摸鱼</title>
+    <script src="js/shortcut.js"></script>
+    <script src="js/statusCodes.js"></script>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1405703_m95c65jfl8o.css">
+    <style type="text/css">
+        * {
+            margin: 0;
+            border: 0;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            background: url("images/bg.jpg") no-repeat;
+            background-size: cover;
+        }
+
+        #moyu-main-warp {
+            top: 150px;
+            height: 650px;
+            width: 920px;
+            margin: 0 auto;
+            display: flex;
+            border: #000 1px solid;
+            box-shadow: #00000082 0 0 10px 0;
+            position: relative;
+        }
+
+        #left-warp {
+            height: 100%;
+            min-width: 220px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            background: #44546a;
+        }
+
+        #right-warp {
+            height: 100%;
+            min-width: 700px;
+            width: 700px;
+            display: flex;
+            flex-direction: column;
+            background: #dedede;
+        }
+
+        #left-warp-top {
+            width: 100%;
+            height: 200px;
+            min-height: 200px;
+            /*background: #b0f97b;*/
+            text-align: center;
+        }
+
+        #left-warp-middle {
+            width: 100%;
+            height: 40px;
+            min-height: 40px;
+            background: #303b4f;
+            display: flex;
+        }
+
+        #left-warp-bottom {
+            width: 100%;
+            height: 100%;
+            background: #303b4f;
+        }
+
+        #right-warp-top {
+            width: 100%;
+            height: 30px;
+            min-height: 30px;
+            display: flex;
+            line-height: 30px;
+        }
+
+        #right-warp-messageBox {
+            width: 100%;
+            height: 100%;
+            /*background: #f99ab5;*/
+        }
+
+        #right-warp-tools {
+            width: 100%;
+            height: 30px;
+            min-height: 30px;
+            /*background: #f98ccf;*/
+        }
+
+        #right-warp-text {
+            width: 100%;
+            height: 100px;
+            min-height: 100px;
+            /*background: #f977ef;*/
+        }
+
+        #right-warp-bottom {
+            width: 100%;
+            height: 40px;
+            min-height: 40px;
+            /*background: #b660f9;*/
+        }
+
+        #user-warp-img {
+            width: 100%;
+        }
+
+        #user-warp-img img {
+            margin-top: 50px;
+            width: 80px;
+            height: 80px;
+            border: white 3px solid;
+            border-radius: 50%;
+            transition: box-shadow 0.5s, width 0.5s, height 0.5s, margin-top 0.5s;
+            cursor: pointer;
+        }
+
+        #user-warp-img img:hover {
+            margin-top: 40px;
+            width: 100px;
+            height: 100px;
+            box-shadow: #000000cc 0 0 10px 0;
+        }
+
+
+        #user-warp-info {
+            color: white;
+            margin-top: 5px;
+            font-weight: bold;
+            font-size: 17px;
+            font-family: 微软雅黑, sans-serif;
+        }
+
+        .left-warp-middle-select {
+            width: 100%;
+            height: 100%;
+        }
+
+        .left-warp-middle-select label {
+            width: 100%;
+            height: 100%;
+            color: #ffffff63;
+            line-height: 40px;
+            display: block;
+            text-align: center;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .iconfont {
+            font-size: 20px;
+        }
+
+        .left-warp-middle-select label:hover {
+            color: #ffffff93;
+        }
+
+        .left-warp-middle-select input {
+            display: none;
+        }
+
+        .left-warp-middle-select input:checked + label {
+            color: #fdfbff;
+        }
+
+        .list-item {
+            margin-top: 5px;
+            height: 60px;
+            width: 100%;
+            display: flex;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            /*background-color: #15394f;*/
+        }
+
+        .list-item:hover {
+            background-color: #3a475f;
+        }
+
+        .list-item input {
+            display: none;
+        }
+
+        .list-item label {
+            width: 100%;
+            height: 100%;
+        }
+
+        .list-item-left {
+            width: 60px;
+            min-width: 60px;
+        }
+
+
+        .list-item-left img {
+            width: 46px;
+            height: 46px;
+            margin-top: 7px;
+            margin-left: 12px;
+            border-radius: 50%;
+        }
+
+        .list-item-right {
+            width: 100%;
+        }
+
+        .list-item-right-title {
+            padding-top: 10px;
+            padding-left: 10px;
+            font-size: 14px;
+            color: white;
+            font-family: 微软雅黑, sans-serif;
+            font-weight: bold;
+
+        }
+
+        .list-item-right-detail {
+            font-family: 微软雅黑, sans-serif;
+            padding-top: 5px;
+            font-size: 13px;
+            color: #ffffff99;
+            padding-left: 10px;
+        }
+
+        #top-title {
+            font-family: 微软雅黑, sans-serif;
+            font-weight: bold;
+            padding-left: 10px;
+            color: #b4b4b4;
+            /*text-shadow: #00000057 0 0 2px;*/
+        }
+
+
+        #right-warp-top-title {
+            width: 100%;
+        }
+
+        #right-warp-top-button {
+            min-width: 20px;
+            padding-right: 10px;
+            color: #b4b4b4;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        #right-warp-top-button:hover {
+            color: #898989;
+        }
+
+        #right-warp-tools {
+            color: #b4b4b4;
+            border-top: #cacaca 1px solid;
+        }
+
+        #right-warp-tools div {
+            display: inline-block;
+            transition: color 0.3s;
+            cursor: pointer;
+            margin: 3px 5px;
+        }
+
+        #right-warp-tools div:first-child {
+            margin-left: 10px;
+        }
+
+        #right-warp-tools div:hover {
+            color: #f9bb3c;
+        }
+
+        .tool-font {
+            font-size: 22px;
+        }
+
+        #text-send {
+            overflow-y: auto;
+            width: 96%;
+            height: 80%;
+            margin: auto;
+            padding: 7px;
+            font-family: 微软雅黑, sans-serif;
+            outline: none;
+            background-color: white;
+            border-radius: 5px;
+            color: #6f6f6f;
+        }
+
+        #right-warp-bottom {
+            text-align: right;
+        }
+
+        #button-send {
+            margin: 3px 13px 0 auto;
+            color: #576e8e;
+            width: 30px;
+            height: 30px;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        #button-send:hover {
+            color: #00b1ff;
+        }
+
+        .btn-send {
+            font-size: 30px;
+        }
+
+
+    </style>
+    <style>
+        #text-send::-webkit-scrollbar { /*滚动条整体样式*/
+            width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+            height: 1px;
+        }
+
+        #text-send::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+            border-radius: 10px;
+            /*background: #CCCCCC;*/
+        }
+
+        #text-send:hover::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+            /*border-radius: 10px;*/
+            background: #CCCCCC;
+        }
+
+        #text-send::-webkit-scrollbar-track { /*滚动条里面轨道*/
+
+        }
+
+    </style>
+</head>
+<body>
+<div id="moyu-main-warp">
+    <div id="left-warp">
+        <div id="left-warp-top">
+            <div id="user-warp">
+                <div id="user-warp-img">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div id="user-warp-info">
+                    <span>username</span>
+                </div>
+            </div>
+
+        </div>
+        <div id="left-warp-middle">
+            <div class="left-warp-middle-select">
+                <input id="select01" type="radio" name="select" checked="">
+                <label for="select01"><i class="iconfont iconxiaoxi"></i></label>
+            </div>
+            <div class="left-warp-middle-select">
+                <input id="select02" type="radio" name="select">
+                <label for="select02"><i class="iconfont iconziyuan"></i></label>
+            </div>
+            <div class="left-warp-middle-select">
+                <input id="select03" type="radio" name="select">
+                <label for="select03"><i class="iconfont icontongzhi"></i></label>
+            </div>
+        </div>
+        <div id="left-warp-bottom">
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left">
+                    <img src="images/avatar.jpeg" alt="头像"/>
+                </div>
+                <div class="list-item-right">
+                    <div class="list-item-right-title">
+                        <span>SDN 摸鱼</span>
+                    </div>
+                    <div class="list-item-right-detail">
+                        <span> 123 </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="right-warp">
+        <div id="right-warp-top">
+            <div id="right-warp-top-title">
+                <span id="top-title">SDN 摸鱼</span>
+            </div>
+            <div id="right-warp-top-button">
+                <span><i class="iconfont iconweibiaoti15"></i></span>
+            </div>
+        </div>
+        <div id="right-warp-messageBox">
+
+        </div>
+        <div id="right-warp-tools">
+            <div id="tool-faces" title="表情">
+                <span><i class="tool-font iconfont iconbiaoqing2"></i></span>
+            </div>
+            <div id="tool-favorite" title="收藏">
+                <span><i class="tool-font iconfont iconshoucang-"></i></span>
+            </div>
+            <div id="tool-file" title="上传">
+                <span><i class="tool-font iconfont iconweibiaoti5"></i></span>
+            </div>
+        </div>
+        <div id="right-warp-text">
+            <pre id="text-send" contenteditable="true"></pre>
+        </div>
+        <div id="right-warp-bottom" title="发送信息">
+            <div id="button-send"><i class="btn-send tool-font iconfont iconfasong"></i></div>
+        </div>
+    </div>
+</div>
+<script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+<script>
+    L2Dwidget.init({
+        "model": {
+            jsonPath: "https://unpkg.com/live2d-widget-model-z16@1.0.5/assets/z16.model.json",
+            "scale": 1
+        },
+        "display": {
+            "position": "right",
+            "width": 150,
+            "height": 300,
+            "hOffset": 0,
+            "vOffset": -45
+        },
+        "mobile": {
+            "show": true,
+            "scale": 0.5
+        },
+        "react": {
+            "opacityDefault": 1,
+            "opacityOnHover": 0.2
+        }
+    });
+</script>
+</body>
+<script>
+
+</script>
+</html>

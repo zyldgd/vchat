@@ -2,12 +2,12 @@ package com.zing.vchat.cache;
 
 import com.zing.vchat.JsonElement.UserJson;
 import com.zing.vchat.base.Token;
-import com.zing.vchat.dao.UsersDao;
-import com.zing.vchat.message.MessageBox;
-import org.glassfish.jersey.media.sse.EventOutput;
+        import com.zing.vchat.dao.UsersDao;
+        import com.zing.vchat.message.MessageBox;
+        import org.glassfish.jersey.media.sse.EventOutput;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+        import java.util.Map;
+        import java.util.concurrent.ConcurrentHashMap;
 
 public class UsersCache {
     private static Map<String, UserCacheInfo> usersCacheInfo = new ConcurrentHashMap<>(1000);

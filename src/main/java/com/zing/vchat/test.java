@@ -1,9 +1,17 @@
 package com.zing.vchat;
 
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.fasterxml.jackson.databind.util.JSONWrappedObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+
+
 
 public class test {
 
@@ -11,7 +19,13 @@ public class test {
     static Object lock = new Object();
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args){
+        new test();
+        System.out.println("qwe".substring(0, 2));
+    }
+
+
+    public static void main2(String[] args) throws InterruptedException {
 
         ExecutorService executorService = Executors.newCachedThreadPool();
         // 收线程
@@ -28,7 +42,7 @@ public class test {
                         e.printStackTrace();
                     }
 
-                    System.out.println("我收到了:"+message);
+                    System.out.println("我收到了:" + message);
                     message = "";
                     lock.notifyAll();
                 }
