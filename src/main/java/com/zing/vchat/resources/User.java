@@ -37,6 +37,22 @@ public class User {
 
 
     /**
+     * 获取/查询用户信息
+     * @param request HTTP 请求
+     * @return 状态码
+     */
+    @GET
+    @Path("/users")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUsers(@Context HttpServletRequest request) {
+        if (!AuthorizationUtils.isPass(request)){
+            return Response.status(StatusCode.Forbidden.getCode()).build();
+        }
+        return Response.ok(UsersCache.getUserCacheInfo(AuthorizationUtils.getUserId(request)).getUserJson()).build();
+    }
+
+
+    /**
      * 注册新用户
      * @param userJson 用户信息
      * @return 状态码
