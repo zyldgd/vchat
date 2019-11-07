@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>摸鱼</title>
-    <script src="js/shortcut.js"></script>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="js/keyboard_shortcuts.js"></script>
+    <script src="js/base.js"></script>
     <script src="js/md5.js"></script>
     <script src="js/statusCodes.js"></script>
     <link rel="stylesheet" href="http://at.alicdn.com/t/font_1405703_m95c65jfl8o.css">
@@ -36,7 +36,7 @@
             width: 920px;
             margin: 0 auto;
             display: flex;
-            border: #000 1px solid;
+            /*border: #000 1px solid;*/
             box-shadow: #00000082 0 0 10px 0;
             position: relative;
         }
@@ -328,7 +328,7 @@
         }
 
         .button-send {
-            margin: 3px 13px 0 auto;
+            margin: 0 13px 0 auto;
             color: #576e8e;
             width: 30px;
             height: 30px;
@@ -406,6 +406,7 @@
         }
 
         .chat-avatar-img {
+            box-shadow: #00000014 0 0 6px 0;
             margin-top: 10px;
             background: white;
             border-radius: 50%;
@@ -435,7 +436,7 @@
         .chat-line-right .chat-content-word {
             text-align: left;
             color: white;
-            background-color: #027991;
+            background-color: #44546a;
         }
 
         .chat-content-word img {
@@ -456,13 +457,29 @@
             border-radius: 10px;
         }
 
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+        .list-enter-active {
+            animation: bounce-in .5s;
+        }
+
+        .list-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+
 
     </style>
 </head>
-<button onclick="addContact()">+</button>
 <body>
 <div id="app-moyu" class="moyu-main-warp">
-
     <div class="left-warp">
         <div class="left-warp-top">
             <div class="user-warp">
@@ -510,57 +527,59 @@
         <div class="right-warp-top">
             <div class="right-warp-top-title">
                 <span class="top-title">{{Cache.curDialogID}}</span>
+                <button v-on:click="addEE()">+</button>
+                <button v-on:click="addEEE()">+</button>
+                <button v-on:click="addEEEE()">+</button>
             </div>
             <div class="right-warp-top-button">
                 <span><i class="iconfont iconweibiaoti15"></i></span>
             </div>
         </div>
-        <div class="right-warp-messageBox scrollbar">
+        <div id="MessagesBox" class="right-warp-messageBox scrollbar">
+            <p hidden>{{ Cache.Count }}</p>
             <ul class="chat-list">
-                <!--<p >{{ Count }}</p>-->
-                <button v-on:click="addE()">++</button>
-                <template v-for="(value, key, index)  in Cache.dialogsInfotest">
-                    <p>{{ index }}. {{ key }} : {{ value }}</p>
+
+                <!--<button v-on:click="addE()">++</button>-->
+                <!--<template v-for="(value, key, index)  in Cache.dialogsInfotest">-->
+                <!--<p>{{ index }}. {{ key }} : {{ value }}</p>-->
+                <!--</template>-->
+                <template v-for="key in Cache.dialogsInfo.keys()">
+                    <div v-bind:class="{hidden: (key != Cache.curDialogID)}">
+                        <transition-group name="list">
+                            <div v-for="(message, index) in Cache.dialogsInfo.get(key)" v-bind:key="index">
+                                <li class="chat-tip" v-if="message.showType == 'tip'">
+                                    <span>{{message.content}}</span>
+                                </li>
+                                <li class="chat-line"
+                                    v-if="message.showType == 'message' && message.senderId != Cache.userId">
+                                    <div class="chat-avatar">
+                                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                                    </div>
+                                    <div class="chat-content">
+                                        <div class="chat-content-info">{{message.senderId}}</div>
+                                        <div class="chat-content-word">
+                                            <pre v-html="message.content">{{message.content}}</pre>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="chat-line-right"
+                                    v-if="message.showType == 'message' && message.senderId == Cache.userId">
+                                    <div class="chat-content">
+                                        <div class="chat-content-info">&nbsp;</div>
+                                        <div class="chat-content-word">
+                                            <pre v-html="message.content">{{message.content}}</pre>
+                                        </div>
+                                    </div>
+                                    <div class="chat-avatar">
+                                        <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
+                                    </div>
+                                </li>
+                            </div>
+                        </transition-group>
+                    </div>
                 </template>
 
-                <button v-on:click="addEE()">+</button>
-                <template v-for="(value, key, index)  in Cache.dialogsInfo">
-                    <p>{{ key }}</p>
-                </template>
-
-                <template v-for="message in Cache.messages">
-                    <template v-if="message.dialogId == Cache.curDialogID">
-                        <li class="chat-tip" v-if="message.showType == 'tip'">
-                            <span>{{message.content}}</span>
-                        </li>
-                        <li class="chat-line"
-                            v-if="message.showType == 'message' && message.senderId != Cache.userId">
-                            <div class="chat-avatar">
-                                <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
-                            </div>
-                            <div class="chat-content">
-                                <div class="chat-content-info">{{message.senderId}}</div>
-                                <div class="chat-content-word">
-                                    <pre v-html="message.content">{{message.content}}</pre>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="chat-line-right"
-                            v-if="message.showType == 'message' && message.senderId == Cache.userId">
-                            <div class="chat-content">
-                                <div class="chat-content-info">&nbsp;</div>
-                                <div class="chat-content-word">
-                                    <pre v-html="message.content">{{message.content}}</pre>
-                                </div>
-                            </div>
-                            <div class="chat-avatar">
-                                <img class="chat-avatar-img" src="images/avatar.jpeg" alt="头像">
-                            </div>
-                        </li>
-
-                        <!--</div>-->
-                    </template>
-                </template>
+                <!--<div style="height: 100px"></div>-->
             </ul>
         </div>
         <div class="right-warp-tools">
@@ -584,6 +603,7 @@
     </div>
 
 </div>
+</body>
 
 <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
 <script>
@@ -609,64 +629,40 @@
         }
     });
 </script>
-
-</body>
-<script>
-    String.prototype.format = function (args) {
-        let result = this;
-        if (arguments.length > 0) {
-            if (arguments.length === 1 && typeof (args) == "object") {
-                for (let key in args) {
-                    if (args[key] !== undefined) {
-                        let reg = new RegExp("({" + key + "})", "g");
-                        result = result.replace(reg, args[key]);
-                    }
-                }
-            } else {
-                for (let i = 0; i < arguments.length; i++) {
-                    if (arguments[i] !== undefined) {
-                        let reg = new RegExp("({)" + i + "(})", "g");
-                        result = result.replace(reg, arguments[i]);
-                    }
-                }
-            }
-        }
-        return result;
-    };
-
-    function dateFormat(fmt, date) {
-        let ret;
-        let opt = {
-            "Y+": date.getFullYear().toString(),        // 年
-            "m+": (date.getMonth() + 1).toString(),     // 月
-            "d+": date.getDate().toString(),            // 日
-            "H+": date.getHours().toString(),           // 时
-            "M+": date.getMinutes().toString(),         // 分
-            "S+": date.getSeconds().toString()          // 秒
-        };
-        for (let k in opt) {
-            ret = new RegExp("(" + k + ")").exec(fmt);
-            if (ret) {
-                fmt = fmt.replace(ret[1], (ret[1].length === 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-            }
-        }
-        return fmt;
-    }
-</script>
-
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
 <script>
     // @ts-check
 
 
-    function User() {
-        this.userId = null;
-        this.username = null;
-        this.password = null;
-        this.nickname = "";
-        this.email = null;
-        this.avatarPath = null;
-        this.remark = null;
-        this.grade = null;
+    function autoScrollToBottom() {
+        let MessagesBox = document.getElementById("MessagesBox");
+        MessagesBox.scrollTop = MessagesBox.scrollHeight + 100;
+    }
+
+    class User {
+        userId = null;
+        username = null;
+        password = null;
+        nickname = "";
+        email = null;
+        avatarPath = null;
+        remark = null;
+        grade = null;
+
+        static userBuilder (user) {
+            return {
+                userId: user.userId,
+                username: user.username,
+                password: user.password,
+                nickname: user.nickname,
+                email: user.email,
+                avatarPath: user.avatarPath,
+                remark: user.remark,
+                grade: user.grade
+            }
+        }
     }
 
     function Group() {
@@ -677,10 +673,26 @@
         this.imagePath = null;
     }
 
-    function Contact(contactId, type, remarkName) {
-        this.contactId = contactId;
-        this.type = type;
-        this.remarkName = remarkName;
+    class Contact {
+        contactId = null;
+        type = null;
+        remarkName = null;
+
+        static contactBuilder (contact) {
+            return {
+                contactId: contact.contactId,
+                type: contact.type,
+                remarkName: contact.remarkName,
+            }
+        }
+
+        static contactsBuilder (contacts) {
+            let list = [];
+            contacts.forEach(function (item, index) {
+                list.push(Contact.contactBuilder(item));
+            });
+            return list;
+        }
     }
 
     class Message {
@@ -719,16 +731,13 @@
 
     class Cache {
         userId = 100000;
-        userInfo = "";
+        user = null;
         curDialogID = 'private-100001';
         dialogsInfotest = new Map();
         dialogsInfo = new Map();
         dialogs = [];
-
-        contactsInfo = [
-            new Contact(100001, "friend", "honey1"),
-            new Contact(100002, "friend", "honey2"),
-            new Contact(100003, "friend", "honey3")];
+        Count = 0;
+        contactsInfo = null;
 
         messages = [];
 
@@ -739,6 +748,7 @@
          * @param message {Message}
          */
         pushMessages(message) {
+            if (message.content === '') return;
             let dialogId;
             if (message.messageType === 'private') {
                 dialogId = 'private-' + ((message.senderId !== this.userId) ? message.senderId : message.receiverId);
@@ -753,6 +763,7 @@
          * @param message {Message}
          */
         pushMessages2(message) {
+            if (message.content === '') return;
             if (message.messageType === 'private') {
                 let key = 'private-' + ((message.senderId !== this.userId) ? message.senderId : message.receiverId);
                 if (this.dialogsInfo.has(key)) {
@@ -772,7 +783,10 @@
                     this.dialogsInfo.get(key).push(message);
                 }
             }
+            this.Count++;
             console.log(this.dialogsInfo);
+
+
         };
     }
 
@@ -781,10 +795,43 @@
         el: '#app-moyu',
         data: {
             Cache: new Cache(),
-            alt: 23333,
-            seen: true,
-            Count: 0
+            seen: true
         },
+        created:
+            function () {
+                let self = this;
+                axios({
+                    method: "GET",
+                    url: '/webapi/user',
+                    headers: {
+                        // 'Content-Type': 'application/x-www-form-urlencoded'
+                        'userId': getCookie('userId'),
+                        'token': getCookie('token')
+                    }
+                }).then(function (response) {
+                    console.log(response.data);
+                    self.Cache.user = User.userBuilder(response.data);
+                    console.log(self.Cache.user);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+
+                axios({
+                    method: "GET",
+                    url: '/webapi/contacts',
+                    headers: {
+                        // 'Content-Type': 'application/x-www-form-urlencoded'
+                        'userId': getCookie('userId'),
+                        'token': getCookie('token')
+                    }
+                }).then(function (response) {
+                    console.log(response.data);
+                    self.Cache.contactsInfo = Contact.contactsBuilder(response.data);
+                    console.log(self.Cache.contactsInfo);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
         methods: {
             /**
              * @param contact {Contact}
@@ -805,17 +852,22 @@
                 let receiverId = str[1];
                 let messageType = str[0];
                 let message = messageBuilder(this.Cache.userId, receiverId, messageType);
-                console.log(message);
-                this.Cache.pushMessages(message);
+                this.Cache.pushMessages2(message);
             },
 
-            addE: function () {
-                this.Cache.dialogsInfotest.set("" + this.Count++, this.Count);
-                console.log(this.Cache.dialogsInfotest.keys());
-            },
+
             addEE: function () {
-                this.Cache.pushMessages2(new Message('hello1' + count, 100001, 100000, 'private', 'message'));
+                self.location.href = "/vtest.html";
+                this.Cache.pushMessages2(new Message('hello1', 100001, 100000, 'private', 'message'));
+            },
+            addEEE: function () {
+                this.Cache.pushMessages2(new Message('hello2', 100002, 100000, 'private', 'message'));
+            },
+            addEEEE: function () {
+                this.Cache.pushMessages2(new Message('hello3', 100003, 100000, 'private', 'message'));
             }
+
+
         }
     });
 
