@@ -89,6 +89,11 @@ public class GroupDao {
         return true;
     }
 
+    public static boolean insertMember(String groupId, String memberId) {
+        // TODO 添加成员
+        return true;
+    }
+
     public static boolean insertMembers(String groupId, List<String> memberId) {
         // TODO 添加成员s
         return true;

@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-
 public class UsersDao {
 
     public static UserJson queryById(String userId) {
@@ -136,7 +135,7 @@ public class UsersDao {
     public static boolean insert(UserJson userJson) {
         DBApi dbApi = new DBApi(DBApi.MOYU_DB);
         Connection connection = dbApi.getConnection();
-        String sql = "INSERT INTO users(username, password, nickname, email, avatarPath, remark, grade) VALUES(?,SHA(?),?,?,?,?,?)";
+        String sql = "INSERT INTO users(username, password, nickname, email, avatarPath, remark, grade, active) VALUES(?,SHA(?),?,?,?,?,?,?)";
         try {
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -146,7 +145,8 @@ public class UsersDao {
             preparedStatement.setString(4, userJson.getEmail());
             preparedStatement.setString(5, null);
             preparedStatement.setString(6, userJson.getRemark());
-            preparedStatement.setInt(7, 1);
+            preparedStatement.setInt(7, userJson.getGrade());
+            preparedStatement.setInt(8, userJson.getActive() ? 1 : 0);
             preparedStatement.execute();
             connection.commit();
             preparedStatement.close();
@@ -181,10 +181,12 @@ public class UsersDao {
         userJson.setAvatarPath(resultSet.getString("avatarPath"));
         userJson.setRemark(resultSet.getString("remark"));
         userJson.setGrade(resultSet.getInt("grade"));
+        userJson.setActive(resultSet.getBoolean("active"));
         return userJson;
     }
 
     public static void main(String[] args) {
-
+        UserJson userJson = new UserJson("zing","zzz");
+        UsersDao.insert(userJson);
     }
 }

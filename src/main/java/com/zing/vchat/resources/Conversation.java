@@ -22,7 +22,6 @@ public class Conversation {
     /**
      * 获取会话列表
      * @param request HTTP 请求
-     * @param message 消息
      * @return 状态码
      */
     @GET

@@ -31,14 +31,22 @@ public class UserJson {
     @XmlElement(name = "grade")
     private Integer grade;
 
+    /**
+     * 账号状态：0：注销  1：激活
+     */
+    @XmlElement(name = "active")
+    private Boolean active;
+
     public UserJson(){
 
     }
 
-    public UserJson(String userId, String username) {
-        this.userId = userId;
+    public UserJson(String username, String nickname) {
         this.username = username;
+        this.nickname = nickname;
         this.password = "******";
+        this.grade = 1;
+        this.active = true;
     }
 
     public String getUserId() {
@@ -108,5 +116,13 @@ public class UserJson {
 
     public void setGrade(Integer grade) {
         this.grade = grade;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

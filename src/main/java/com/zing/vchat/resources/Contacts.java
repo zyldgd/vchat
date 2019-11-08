@@ -3,6 +3,7 @@ package com.zing.vchat.resources;
 import com.zing.vchat.JsonElement.ContactJson;
 import com.zing.vchat.base.StatusCode;
 import com.zing.vchat.dao.ContactsDao;
+import com.zing.vchat.dao.GroupDao;
 import com.zing.vchat.util.AuthorizationUtils;
 
 import javax.inject.Singleton;
@@ -11,6 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 @Singleton
@@ -36,37 +38,79 @@ public class Contacts {
 
 
     /**
-     * 添加通信录信息
-     *
+     * 添加好友
      * @param request HTTP 请求
-     * @return EventOutput
      */
     @POST
+    @Path("/friend")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response postContact(@Context HttpServletRequest request, @QueryParam("ContactId") String ContactId, @QueryParam("ContactType") String ContactType) {
+    public Response addFriend (@Context HttpServletRequest request, @QueryParam("userId") String userId) {
         if (!AuthorizationUtils.isPass(request)) {
             return Response.status(StatusCode.Forbidden.getCode()).build();
         }
-        // TODO  添加通信录信息
+        // TODO  申请添加好友
+
+        String selfId = AuthorizationUtils.getUserId(request);
+        String addUserId = AuthorizationUtils.getUserId(request);
+        ContactsDao.insert(selfId, new ContactJson(null,addUserId,"friend",null));
+        ContactsDao.insert(addUserId, new ContactJson(null,selfId,"friend",null));
+
         return Response.ok().build();
     }
 
 
     /**
-     * 删除通信录信息
-     *
+     * 加入群聊
      * @param request HTTP 请求
-     * @return EventOutput
      */
-    @DELETE
+    @POST
+    @Path("/group")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response deleteContact(@Context HttpServletRequest request, @QueryParam("ContactId") String ContactId, @QueryParam("ContactType") String ContactType) {
+    public Response addGroup(@Context HttpServletRequest request, @QueryParam("groupId") String groupId) {
         if (!AuthorizationUtils.isPass(request)) {
             return Response.status(StatusCode.Forbidden.getCode()).build();
         }
-        // TODO  删除通信录信息
+        String selfId = AuthorizationUtils.getUserId(request);
+        ContactsDao.insert(selfId, new ContactJson(null,groupId,"group",null));
+        GroupDao.insertMember(groupId, selfId);
+        // TODO  添加通信录信息
         return Response.ok().build();
     }
+
+
+
+    /**
+     * 解除好友
+     * @param request HTTP 请求
+     */
+    @DELETE
+    @Path("/friend")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deleteFriend (@Context HttpServletRequest request, @QueryParam("userId") String userId) {
+        if (!AuthorizationUtils.isPass(request)) {
+            return Response.status(StatusCode.Forbidden.getCode()).build();
+        }
+        // TODO  解除好友
+        return Response.ok().build();
+    }
+
+
+    /**
+     * 退出群聊
+     * @param request HTTP 请求
+     */
+    @DELETE
+    @Path("/group")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deleteGroup(@Context HttpServletRequest request, @QueryParam("groupId") String groupId) {
+        if (!AuthorizationUtils.isPass(request)) {
+            return Response.status(StatusCode.Forbidden.getCode()).build();
+        }
+        // TODO  退出群聊
+        return Response.ok().build();
+    }
+
+
 
     /**
      * 修改通信录信息
@@ -81,7 +125,7 @@ public class Contacts {
         if (!AuthorizationUtils.isPass(request)) {
             return Response.status(StatusCode.Forbidden.getCode()).build();
         }
-        // TODO  删除通信录信息
+        // TODO  修改通信录信息
         return Response.ok().build();
     }
 }

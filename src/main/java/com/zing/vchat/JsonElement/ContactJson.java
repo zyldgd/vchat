@@ -10,6 +10,9 @@ public class ContactJson {
     @XmlElement(name = "contactId")
     private String contactId;
 
+    @XmlElement(name = "peerId")
+    private String peerId;
+
     @XmlElement(name = "type")
     private String type;
 
@@ -19,8 +22,9 @@ public class ContactJson {
     public ContactJson() {
     }
 
-    public ContactJson(String contactId, String type, String remarkName) {
+    public ContactJson(String contactId, String peerId, String type, String remarkName) {
         this.contactId = contactId;
+        this.peerId = peerId;
         this.type = type;
         this.remarkName = remarkName;
     }
@@ -49,8 +53,16 @@ public class ContactJson {
         this.remarkName = remarkName;
     }
 
+    public String getPeerId() {
+        return peerId;
+    }
+
+    public void setPeerId(String peerId) {
+        this.peerId = peerId;
+    }
+
     @Override
     public String toString() {
-        return String.format("contactId:%-10s  type:%-10s  remarkName:%-10s ", contactId, type, remarkName);
+        return String.format("contactId:%-10s   peerId:%-10s   type:%-10s   remarkName:%-10s", contactId, peerId, type, remarkName);
     }
 }
